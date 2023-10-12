@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -21,6 +22,7 @@
 
 App::uses('Controller', 'Controller');
 
+
 /**
  * Application Controller
  *
@@ -30,10 +32,11 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
     public $components = array(
-        'Session',  
-        'Auth' => array (
+        'Session',
+        'Auth' => array(
             'loginRedirect' => array(
                 'controller' => 'users',
                 'action' => 'index'
@@ -44,18 +47,20 @@ class AppController extends Controller {
             ),
             'authError' => "You can't access this page",
             'authorize' => array('Controller')
-        )
+        ),
+        'Url'
     );
 
-    public function isAuthorized($user) {
+    public function isAuthorized($user)
+    {
         return true;
     }
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         $this->Auth->allow(
             'index',
             'view',
         );
     }
 }
- 

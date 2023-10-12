@@ -63,11 +63,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div> -->
 		<nav class="navbar bg-body-tertiary py-3">
 			<div class="container">
-				<a class="navbar-brand">MessageBoard</a>
+				<a class="navbar-brand" href="#">MessageBoard</a>
 				<div class="d-flex">
-					<a class="nav-link px-3" href="#">Home</span></a>
-					<a class="nav-link px-3" href="#">Features</a>
-					<a class="nav-link px-3" href="#">Pricing</a>
+					<!-- <a class="nav-link px-3" href="#">Home</span></a> -->
+
+
+					<?php echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']); ?>
+					<?php echo $this->Html->link('Register', array('controller' => 'Users', 'action' => 'register'), ['class' => 'px-3']); ?>
 				</div>
 			</div>
 		</nav>
@@ -102,5 +104,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <?= $this->Html->script('users/register.js'); ?>
+<?= $this->Html->script('users/login.js'); ?>
 
 </html>
