@@ -2,7 +2,7 @@
 
     <h2>Register</h2>
 
-    <form class="register-form">
+    <form class="register-form" method="POST">
         <div class="row py-2">
             <div class="col-6">
                 <label for="">Name</label>
@@ -46,7 +46,7 @@
 
         <div class="row pt-3">
             <div class="col-6 d-flex justify-content-end">
-                <button class="btn btn-success px-4" id="registerBtn">
+                <button type="submit" class="btn btn-success px-4" id="registerBtn">
                     Login
                 </button>
             </div>

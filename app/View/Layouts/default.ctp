@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,6 +20,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
@@ -26,27 +28,49 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $this->fetch('title'); ?>
 	</title>
 	<?php
-		// echo $this->Html->meta('icon');
-		// echo $this->Html->css('cake.generic');
+	// echo $this->Html->meta('icon');
+	// echo $this->Html->css('cake.generic');
+	echo $this->Html->css('users');
 
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
+	echo $this->fetch('meta');
+	echo $this->fetch('css');
+	echo $this->fetch('script');
 	?>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
+
 <body>
 	<div id="container">
-		<div id="header" class="py-3 bg-light">
+		<!-- <div id="header" class="py-3 bg-light">
 			<div class="container">
-				<h1>Message Board</h1>
+				<div class="row">
+					<div class="col-3">
+						<h1>Message Board</h1>
+					</div>
+					<div class="col-9">
+						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="#">Features</a>
+						<a class="nav-link" href="#">Pricing</a>
+					</div>
+				</div>
+
 			</div>
-			
-		</div>
+
+		</div> -->
+		<nav class="navbar bg-body-tertiary py-3">
+			<div class="container">
+				<a class="navbar-brand">MessageBoard</a>
+				<div class="d-flex">
+					<a class="nav-link px-3" href="#">Home</span></a>
+					<a class="nav-link px-3" href="#">Features</a>
+					<a class="nav-link px-3" href="#">Pricing</a>
+				</div>
+			</div>
+		</nav>
 		<div id="content">
 
 			<?php echo $this->Flash->render(); ?>
@@ -56,15 +80,15 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<div id="footer" class="mt-5 py-3 bg-light">
 			<div class="container">
 				<?php echo $this->Html->link(
-						$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-						'https://cakephp.org/',
-						array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-					);
+					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
+					'https://cakephp.org/',
+					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
+				);
 				?>
 				<p>
 					<?php echo $cakeVersion; ?>
 				</p>
-			</div> 
+			</div>
 
 		</div>
 	</div>
@@ -73,10 +97,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 </body>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" ></script>
-	<?= $this->Html->script('users/register.js'); ?>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<?= $this->Html->script('users/register.js'); ?>
 
+</html>

@@ -1,4 +1,10 @@
-// Document is ready
+// input fields
+const user_name = $("#name");
+const email = $("#email");
+const password = $("#password");
+const confirmPassword = $("#confirmPassword");
+
+// Document is ready`
 $(document).ready(function () {
 	$("#name").on("blur", () => {
 		validateName();
@@ -9,6 +15,9 @@ $(document).ready(function () {
 	$("#password").keyup(function () {
 		validatePassword();
 	});
+	$("#conpassword").keyup(function () {
+		validateConfirmPassword();
+	});
 
 	// Submit button
 	$("#registerBtn").click(function () {
@@ -16,13 +25,29 @@ $(document).ready(function () {
 		validatePassword();
 		validateConfirmPassword();
 		validateEmail();
-		if (
+
+		let validation_passed =
 			nameError == true &&
 			passwordError == true &&
 			confirmPasswordError == true &&
-			emailError == true
-		) {
-			return true;
+			emailError == true;
+
+		if (validation_passed) {
+			const register_data = {
+				name: user_name,
+				email: email,
+				password: password,
+			};
+
+			$.ajax({
+				url: "register",
+				type: "POST",
+				data: register_data,
+				dataType: "json",
+				success: function (data) {
+					console.log("Done");
+				},
+			});
 		} else {
 			return false;
 		}
@@ -33,21 +58,19 @@ $(document).ready(function () {
 
 //Validate Name
 function validateName() {
-	const name = $("#name");
-
-	if (name.val().length == 0) {
-		name.addClass("is-invalid");
+	if (user_name.val().length == 0) {
+		user_name.addClass("is-invalid");
 		nameError = false;
 	} else {
-		name.removeClass("is-invalid");
+		user_name.removeClass("is-invalid");
 		nameError = true;
 	}
 }
+
 // Validate Email
 function validateEmail() {
-	const email = $("#email");
 	let regex = /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
-	let s = email.value;
+	let s = email.val();
 	if (regex.test(s)) {
 		email.removeClass("is-invalid");
 		emailError = true;
@@ -61,9 +84,7 @@ function validateEmail() {
 let passwordError = true;
 
 function validatePassword() {
-	const password = $("#password");
-
-	if (password.val().length < 3) {
+	if (password.val().length <= 3) {
 		password.addClass("is-invalid");
 		passwordError = false;
 	} else {
@@ -73,13 +94,9 @@ function validatePassword() {
 }
 
 // Validate Confirm Password
-
 let confirmPasswordError = true;
-$("#conpassword").keyup(function () {
-	validateConfirmPassword();
-});
+
 function validateConfirmPassword() {
-	const confirmPassword = $("#confirmPassword");
 	let passwordValue = $("#password").val();
 	if (passwordValue != confirmPassword.val()) {
 		confirmPassword.addClass("is-invalid");
