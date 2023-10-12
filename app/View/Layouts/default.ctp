@@ -26,19 +26,26 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $this->fetch('title'); ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
-
-		echo $this->Html->css('cake.generic');
+		// echo $this->Html->meta('icon');
+		// echo $this->Html->css('cake.generic');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 <body>
 	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'https://cakephp.org'); ?></h1>
+		<div id="header" class="py-3 bg-light">
+			<div class="container">
+				<h1>Message Board</h1>
+			</div>
+			
 		</div>
 		<div id="content">
 
@@ -46,18 +53,30 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 			<?php echo $this->fetch('content'); ?>
 		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'https://cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?>
-			<p>
-				<?php echo $cakeVersion; ?>
-			</p>
+		<div id="footer" class="mt-5 py-3 bg-light">
+			<div class="container">
+				<?php echo $this->Html->link(
+						$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
+						'https://cakephp.org/',
+						array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
+					);
+				?>
+				<p>
+					<?php echo $cakeVersion; ?>
+				</p>
+			</div> 
+
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
+
+
 </body>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" ></script>
+	<?= $this->Html->script('users/register.js'); ?>
 </html>
+
