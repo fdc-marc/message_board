@@ -109,4 +109,54 @@ class UsersController extends Controller
 
         $this->set('user', $current_user['User']);
     }
+
+    public function edit()
+    {
+        $current_user = $this->Session->read('Auth.User');
+        $current_user['User']['birthdate'] = date('m/d/Y', strtotime($current_user['User']['birthdate']));
+        // $formattedDate = date("m/d/Y", strtotime($date));
+        $this->set('user', $current_user['User']);
+    }
+
+
+    public function edit_profile()
+    {
+        if ($this->request->is('post')) {
+            $this->User->set($this->request->data);
+            $edit_data = $this->request->data;
+
+            if ($_FILES['profile-photo']['name']) {
+                $file = $_FILES['profile-photo'];
+
+                if ($file['error'] === UPLOAD_ERR_OK) {
+                    $file_new_name = $file['name'] . "-" . $edit_data['id'];
+                    $file_destination = WWW_ROOT . 'img' . DS . 'profile-photos' . DS . $file_new_name;
+
+                    if (move_uploaded_file($file['tmp_name'], $file_destination)) {
+                        // The file was successfully moved to the destination
+                        $edit_data['photo'] = $file_new_name;
+                        if ($this->User->save($this->request->data)) {
+                            $this->Flash->success('Successfully updated profile!');
+                            $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+                        } else {
+                            $this->Flash->error('Failed to update profile!');
+                        }
+                    } else {
+                        // Error moving the file
+                        $this->Session->setFlash('Error uploading file.', 'error');
+                    }
+                } else {
+                    // Handle the file upload error
+                    $this->Session->setFlash('File upload error.', 'error');
+                }
+            } else {
+                if ($this->User->save($this->request->data)) {
+                    $this->Flash->success('Successfully updated profile!');
+                    $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+                } else {
+                    $this->Flash->error('Failed to update profile!');
+                }
+            }
+        }
+    }
 }

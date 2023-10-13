@@ -16,3 +16,8 @@
     align-items: center;
     height: 100vh;
 }
+
+#image-preview{
+    max-width: 250px; /* Set the maximum width */
+    max-height: 250px; /* Set the maximum height */
+}
