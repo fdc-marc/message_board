@@ -9,31 +9,31 @@
 
     <h2>Login</h2>
 
-    <div class="login-form">
+    <form method="POST" class="login-form">
         <div class="row py-2">
             <div class="col-6">
                 <label for="">Email</label>
-                <input class="form-control" type="email" name="email" required>
+                <input class="form-control" type="email" id="login_email" name="login_email" required>
             </div>
         </div>
 
         <div class="row py-2">
             <div class="col-6">
                 <label for="">Password</label>
-                <input class="form-control" type="password" name="password" required>
+                <input class="form-control" type="password" id="login_password" name="login_password" required>
             </div>
         </div>
 
         <div class="row pt-3">
             <div class="col-6 d-flex justify-content-end">
-                <button class="btn btn-success px-4" id="loginBtn">
+                <button type="submit" class="btn btn-success px-4" id="loginBtn">
                     Login
                 </button>
             </div>
 
         </div>
 
-    </div>
+    </form>
 
 
 </div>

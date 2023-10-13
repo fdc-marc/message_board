@@ -36,10 +36,11 @@ class AppController extends Controller
 {
     public $components = array(
         'Session',
+        'Flash',
         'Auth' => array(
             'loginRedirect' => array(
                 'controller' => 'users',
-                'action' => 'index'
+                'action' => 'profile'
             ),
             'logoutRedirect' => array(
                 'controller' => 'users',
@@ -59,8 +60,22 @@ class AppController extends Controller
     public function beforeFilter()
     {
         $this->Auth->allow(
-            'index',
-            'view',
+            'login',
+            'register',
+            'logout',
         );
+
+        $this->set('logged_in', $this->Auth->loggedIn());
+        $this->set('current_user', $this->Auth->user());
+    }
+
+    public function beforeRender()
+    {
+        parent::beforeRender();
+        $autocomplete = $this->User->find('all', array(
+            'fields' => array('User.username')
+        ));
+
+        $this->set('autocomplete', $autocomplete);
     }
 }

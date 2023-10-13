@@ -32,18 +32,24 @@ class UsersController extends Controller
 
             $register_data = $this->request->data;
             unset($register_data['confirmPassword']);
-            $register_data['joined_date'] = date('Y-m-d H:i:s');
+            $current_date_time =  date('Y-m-d H:i:s');
+            $register_data['joined_date'] = $current_date_time;
+            $register_data['last_login_date'] = $current_date_time;
             $register_data['password'] = password_hash($register_data['password'], PASSWORD_DEFAULT);
 
             if ($this->User->save($register_data)) {
                 // $this->Session->setFlash('User registered successfully!');
+                // $user_id = $this->User->getLastInsertID();
+
                 $this->redirect(array('controller' => 'Users', 'action' => 'thank_you'));
+                // $this->set('user_id', $user_id);
             }
         }
     }
 
     public function thank_you()
     {
+        $this->redirect($this->Auth->redirect());
     }
 
     public function index()

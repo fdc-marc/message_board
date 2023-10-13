@@ -1,8 +1,12 @@
 // input fields
 const user_name = $("#name");
+const name_valid = $("#name_valid");
 const email = $("#email");
+const email_valid = $("#email_valid");
 const password = $("#password");
+const password_valid = $("#password_valid");
 const confirmPassword = $("#confirmPassword");
+const confirmpass_valid = $("#confirmpass_valid");
 
 // Document is ready`
 $(document).ready(function () {
@@ -58,11 +62,13 @@ $(document).ready(function () {
 
 //Validate Name
 function validateName() {
-	if (user_name.val().length == 0) {
+	if (user_name.val().length < 5 || user_name.val().length > 20) {
 		user_name.addClass("is-invalid");
+		name_valid.removeClass("invalid-feedback");
 		nameError = false;
 	} else {
 		user_name.removeClass("is-invalid");
+		name_valid.addClass("invalid-feedback");
 		nameError = true;
 	}
 }
@@ -73,9 +79,12 @@ function validateEmail() {
 	let s = email.val();
 	if (regex.test(s)) {
 		email.removeClass("is-invalid");
+		email_valid.addClass("invalid-feedback");
 		emailError = true;
 	} else {
 		email.addClass("is-invalid");
+		email_valid.removeClass("invalid-feedback");
+
 		emailError = false;
 	}
 }
@@ -86,9 +95,12 @@ let passwordError = true;
 function validatePassword() {
 	if (password.val().length <= 3) {
 		password.addClass("is-invalid");
+		password_valid.removeClass("invalid-feedback");
+
 		passwordError = false;
 	} else {
 		password.removeClass("is-invalid");
+		password_valid.addClass("invalid-feedback");
 		passwordError = true;
 	}
 }
@@ -100,9 +112,11 @@ function validateConfirmPassword() {
 	let passwordValue = $("#password").val();
 	if (passwordValue != confirmPassword.val()) {
 		confirmPassword.addClass("is-invalid");
+		confirmpass_valid.removeClass("invalid-feedback");
 		confirmPasswordError = false;
 	} else {
 		confirmPassword.removeClass("is-invalid");
+		confirmpass_valid.addClass("invalid-feedback");
 		confirmPasswordError = true;
 	}
 }

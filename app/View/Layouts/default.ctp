@@ -68,6 +68,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<!-- <a class="nav-link px-3" href="#">Home</span></a> -->
 
 
+
+
 					<?php echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']); ?>
 					<?php echo $this->Html->link('Register', array('controller' => 'Users', 'action' => 'register'), ['class' => 'px-3']); ?>
 				</div>
