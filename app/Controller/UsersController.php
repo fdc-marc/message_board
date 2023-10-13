@@ -97,9 +97,13 @@ class UsersController extends Controller
         // $user = $this->User->findById($id);
         $current_user = $this->Session->read('Auth.User');
 
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $current_user['User']['id'])
+        ));
+
         // format datetime values
-        $joinedDateTime = new DateTime($current_user['User']['joined_date']);
-        $current_user['User']['joined_date'] = $joinedDateTime->format("F d, Y gA");
+        $joinedDateTime = new DateTime($user_details['User']['joined_date']);
+        $user_details['User']['joined_date'] = $joinedDateTime->format("F d, Y gA");
 
         if (isset($user['User']['last_login_date'])) {
             $lastLoginDateTime = new DateTime($user['User']['last_login_date']);
@@ -107,15 +111,21 @@ class UsersController extends Controller
         }
 
 
-        $this->set('user', $current_user['User']);
+        $this->set('user', $user_details['User']);
     }
 
     public function edit()
     {
         $current_user = $this->Session->read('Auth.User');
-        $current_user['User']['birthdate'] = date('m/d/Y', strtotime($current_user['User']['birthdate']));
+
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $current_user['User']['id'])
+        ));
+
+
+        $user_details['User']['birthdate'] = date('m/d/Y', strtotime($user_details['User']['birthdate']));
         // $formattedDate = date("m/d/Y", strtotime($date));
-        $this->set('user', $current_user['User']);
+        $this->set('user', $user_details['User']);
     }
 
 
@@ -124,6 +134,9 @@ class UsersController extends Controller
         if ($this->request->is('post')) {
             $this->User->set($this->request->data);
             $edit_data = $this->request->data;
+
+            // fix birthdate format
+            $edit_data['birthdate'] =  date("Y-m-d", strtotime($edit_data['birthdate']));
 
             if ($_FILES['profile-photo']['name']) {
                 $file = $_FILES['profile-photo'];
@@ -135,7 +148,7 @@ class UsersController extends Controller
                     if (move_uploaded_file($file['tmp_name'], $file_destination)) {
                         // The file was successfully moved to the destination
                         $edit_data['photo'] = $file_new_name;
-                        if ($this->User->save($this->request->data)) {
+                        if ($this->User->save($edit_data)) {
                             $this->Flash->success('Successfully updated profile!');
                             $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                         } else {
@@ -150,7 +163,7 @@ class UsersController extends Controller
                     $this->Session->setFlash('File upload error.', 'error');
                 }
             } else {
-                if ($this->User->save($this->request->data)) {
+                if ($this->User->save($edit_data)) {
                     $this->Flash->success('Successfully updated profile!');
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {

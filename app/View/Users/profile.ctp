@@ -24,12 +24,11 @@
             <div class="col-4 d-flex justify-content-center align-items-center">
                 <div class="profile-img">
                     <?php
-                    if (!$user['photo']) {
-                        echo $this->Html->image('empty-image.jpeg', array('alt' => 'empty-img', 'height' => 250, 'width' => 250));
-                    } else {
-                        echo $this->Html->image('empty-image.jpeg', array('alt' => 'empty-img', 'height' => 250, 'width' => 250));
-                    }
-                    ?>
+                    if (!$user['photo']) : ?>
+                        <img id="image-preview" src="<?php echo $this->webroot; ?>img/empty-image.jpeg">
+                    <?php else : ?>
+                        <img id="image-preview" src="<?php echo $this->webroot; ?>img/profile-photos/<?php echo $user['photo'] ?>">
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="col-8 pt-3 d-flex flex-column justify-content-center">

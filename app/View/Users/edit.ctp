@@ -9,7 +9,7 @@
     <div class="profile-section pt-3">
         <div class="row">
             <div class="col-3">
-                <h2>User Profile</h2>
+                <h2>Edit Profile Info</h2>
             </div>
 
             <div class="col-9 d-flex align-items-center justify-content-end">
@@ -27,7 +27,6 @@
                     <div class="profile-img">
                         <?php
                         if (!$user['photo']) : ?>
-                            <!-- echo $this->Html->image('empty-image.jpeg', array('alt' => 'empty-img', 'height' => 250, 'width' => 250)); -->
                             <img id="image-preview" src="<?php echo $this->webroot; ?>img/empty-image.jpeg">
                         <?php else : ?>
                             <img id="image-preview" src="<?php echo $this->webroot; ?>img/profile-photos/<?php echo $user['photo'] ?>">
