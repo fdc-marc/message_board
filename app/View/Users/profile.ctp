@@ -1,6 +1,11 @@
 <div class="container pt-3">
 
 
+    <?php
+    // if ($this->Session->flash('flash')) :
+    echo $this->Session->flash('flash');
+    ?>
+
     <div class="profile-section">
         <h2>User Profile</h2>
         <div class="row pt-3">

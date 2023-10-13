@@ -1,15 +1,16 @@
 <div class="container pt-3">
 
 
-    <?php if ($this->Session->flash()) : ?>
-        <div class="success-message">
-            <?php echo $this->Session->flash(); ?>
-        </div>
-    <?php endif; ?>
+    <?php
+    // if ($this->Session->flash('flash')) {
+    echo $this->Session->flash('flash');
+    // }
+    ?>
+
 
     <h2>Login</h2>
 
-    <form method="POST" class="login-form">
+    <form action="/message_board/users/login_request" method="POST" class="login-form">
         <div class="row py-2">
             <div class="col-6">
                 <label for="">Email</label>

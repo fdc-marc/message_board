@@ -11,16 +11,39 @@ class UsersController extends Controller
 
     public function logout()
     {
+        $this->Session->delete('Auth.User');
+
+        $this->redirect(array('controller' => 'users', 'action' => 'login'));
     }
 
     public function login_request()
     {
         if ($this->request->is('post')) {
-            if ($this->Auth->login()) {
-                $this->Session->setFlash(__('Successfully logged in!'));
-                $this->redirect(array('action' => 'thank_you'));
+            $login_req = $this->request->data;
+
+            $user = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.email' => $login_req['login_email'],
+                )
+            ));
+
+            if ($user) {
+                // check if password is correct
+                $passwordHasher = new SimplePasswordHasher(array('hashType' => 'sha256'));
+
+                if ($passwordHasher->check($login_req['login_password'], $user['User']['password'])) {
+                    $this->Session->write('Auth.User', $user);
+                    $this->Session->setFlash('Successfully logged in!');
+
+                    $this->set('user', $user['User']);
+                    $this->redirect(array('action' => 'profile'));
+                } else {
+                    $this->Session->setFlash('Invalid username or password');
+                    $this->redirect(array('action' => 'login'));
+                }
             } else {
-                $this->Session->setFlash(__('Invalid username or password'));
+                $this->Session->setFlash('Invalid username or password');
+                $this->redirect(array('action' => 'login'));
             }
         }
     }
@@ -69,13 +92,14 @@ class UsersController extends Controller
         return "Hello";
     }
 
-    public function profile($id = null)
+    public function profile()
     {
-        $user = $this->User->findById($id);
+        // $user = $this->User->findById($id);
+        $current_user = $this->Session->read('Auth.User');
 
         // format datetime values
-        $joinedDateTime = new DateTime($user['User']['joined_date']);
-        $user['User']['joined_date'] = $joinedDateTime->format("F d, Y gA");
+        $joinedDateTime = new DateTime($current_user['User']['joined_date']);
+        $current_user['User']['joined_date'] = $joinedDateTime->format("F d, Y gA");
 
         if (isset($user['User']['last_login_date'])) {
             $lastLoginDateTime = new DateTime($user['User']['last_login_date']);
@@ -83,6 +107,6 @@ class UsersController extends Controller
         }
 
 
-        $this->set('user', $user['User']);
+        $this->set('user', $current_user['User']);
     }
 }

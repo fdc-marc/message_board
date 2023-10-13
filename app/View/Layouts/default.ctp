@@ -73,7 +73,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<?php
 					if ($this->Session->check('Auth.User')) :
 						$current_user = $this->Session->read('Auth.User');
-						echo $current_user['name'];
+						echo $current_user['name'] ?? $current_user['User']['name'];
 						echo $this->Html->link('Logout', array('controller' => 'Users', 'action' => 'logout'), ['class' => 'px-3']);
 					else :
 						echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']);
