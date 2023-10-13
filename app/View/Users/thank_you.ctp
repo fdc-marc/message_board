@@ -1,5 +1,6 @@
 <?php
-
+$current_user = $this->Session->read('Auth.User');
+var_dump($current_user);
 ?>
 
 <div class="thank-you-body">
@@ -10,7 +11,7 @@
         </div>
         <div class="col-12 d-flex justify-content-center">
             <!-- <a href=""><button class="btn btn-light">Back to homepage</button></a> -->
-            <?php echo $this->Html->link('Back to homepage', array('controller' => 'Users', 'action' => 'thank_you'), ['class' => 'btn btn-light px-3']); ?>
+            <?php echo $this->Html->link('Back to homepage', array('controller' => 'Users', 'action' => 'profile/' . $current_user['id']), ['class' => 'btn btn-light px-3']); ?>
         </div>
     </div>
 

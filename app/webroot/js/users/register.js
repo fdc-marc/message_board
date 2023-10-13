@@ -1,4 +1,4 @@
-// input fields
+// register form elements
 const user_name = $("#name");
 const name_valid = $("#name_valid");
 const email = $("#email");
@@ -8,7 +8,6 @@ const password_valid = $("#password_valid");
 const confirmPassword = $("#confirmPassword");
 const confirmpass_valid = $("#confirmpass_valid");
 
-// Document is ready`
 $(document).ready(function () {
 	$("#name").on("blur", () => {
 		validateName();

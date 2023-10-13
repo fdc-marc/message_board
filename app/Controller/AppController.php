@@ -44,10 +44,23 @@ class AppController extends Controller
             ),
             'logoutRedirect' => array(
                 'controller' => 'users',
-                'action' => 'index'
+                'action' => 'login'
             ),
             'authError' => "You can't access this page",
-            'authorize' => array('Controller')
+            'authorize' => 'Controller',
+            'authenticate' => array(
+                'Form' => array(
+                    'userModel' => 'User',
+                    'passwordHasher' => array(
+                        'className' => 'Simple',
+                        'hashType' => 'sha256'
+                    ),
+                    'fields' => array(
+                        'username' => 'email', // Assuming email is the field used for login
+                        'password' => 'password'
+                    )
+                )
+            )
         ),
         'Url'
     );
@@ -62,11 +75,11 @@ class AppController extends Controller
         $this->Auth->allow(
             'login',
             'register',
-            'logout',
+            // 'logout',
         );
 
-        $this->set('logged_in', $this->Auth->loggedIn());
-        $this->set('current_user', $this->Auth->user());
+        // $this->set('logged_in', $this->Auth->loggedIn());
+        // $this->set('current_user', $this->Auth->user());
     }
 
     public function beforeRender()

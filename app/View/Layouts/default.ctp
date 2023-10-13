@@ -70,8 +70,18 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 
 
-					<?php echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']); ?>
-					<?php echo $this->Html->link('Register', array('controller' => 'Users', 'action' => 'register'), ['class' => 'px-3']); ?>
+					<?php
+					if ($this->Session->check('Auth.User')) :
+						$current_user = $this->Session->read('Auth.User');
+						echo $current_user['name'];
+						echo $this->Html->link('Logout', array('controller' => 'Users', 'action' => 'logout'), ['class' => 'px-3']);
+					else :
+						echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']);
+						echo $this->Html->link('Register', array('controller' => 'Users', 'action' => 'register'), ['class' => 'px-3']);
+					?>
+					<?php endif; ?>
+
+
 				</div>
 			</div>
 		</nav>

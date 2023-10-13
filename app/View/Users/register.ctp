@@ -14,6 +14,13 @@
                 <small id="email_valid" class="form-text text-danger invalid-feedback">
                     Your email must be a valid email.
                 </small>
+
+                <?php
+                if ($this->Session->flash('flash')) :
+                    echo $this->Session->flash('flash', array('class' => 'form-text text-danger invalid-feedback'));
+                ?>
+                <?php endif; ?>
+
             </div>
             <div class="row">
                 <small id="password_valid" class="form-text text-danger invalid-feedback">
