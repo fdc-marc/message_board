@@ -172,4 +172,37 @@ class UsersController extends Controller
             }
         }
     }
+
+    public function edit_email()
+    {
+        $current_user = $this->Session->read('Auth.User');
+
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $current_user['User']['id'])
+        ));
+
+        $this->set('user', $user_details['User']);
+    }
+
+    public function edit_email_request()
+    {
+        if ($this->request->is('post')) {
+            $this->User->set($this->request->data);
+
+            if ($this->User->validates()) {
+                // Data passed validation rules
+                $edit_data = $this->request->data;
+
+                if ($this->User->save($edit_data)) {
+                    $this->Flash->success('Successfully updated email!');
+                    $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+                } else {
+                    $this->Flash->error('Failed to update email!');
+                }
+            } else {
+                // Data failed validation
+                $this->Flash->error('Validation failed. Please check the form for errors.');
+            }
+        }
+    }
 }

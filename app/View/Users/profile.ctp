@@ -14,7 +14,7 @@
 
             <div class="col-9 d-flex align-items-center justify-content-end">
                 <?php echo $this->Html->link('Edit Profile', array('controller' => 'Users', 'action' => 'edit'), ['class' => 'btn btn-light']); ?>
-                <?php echo $this->Html->link('Change Email', array('controller' => 'Users', 'action' => 'profile'), ['class' => 'btn btn-light']); ?>
+                <?php echo $this->Html->link('Change Email', array('controller' => 'Users', 'action' => 'edit_email'), ['class' => 'btn btn-light']); ?>
                 <?php echo $this->Html->link('Change Password', array('controller' => 'Users', 'action' => 'profile'), ['class' => 'btn btn-light']); ?>
             </div>
 
