@@ -50,6 +50,10 @@ class UsersController extends Controller
 
     public function register()
     {
+    }
+
+    public function register_request()
+    {
         if ($this->request->is('post')) {
             $this->User->create();
 
@@ -65,8 +69,11 @@ class UsersController extends Controller
                 'conditions' => array('User.email' => $register_data['email'])
             ));
 
+            var_dump($existingUser);
+
             if ($existingUser) {
                 $this->Session->setFlash('Email address is already in use.', 'default', array('class' => 'form-text text-danger'));
+                $this->redirect(array('action' => 'register'));
             }
 
             if ($this->User->save($register_data)) {
@@ -78,6 +85,7 @@ class UsersController extends Controller
                 // }
             } else {
                 $this->Session->setFlash(__('Registration Failed.'));
+                $this->redirect(array('action' => 'register'));
             }
         }
     }
@@ -97,8 +105,10 @@ class UsersController extends Controller
         // $user = $this->User->findById($id);
         $current_user = $this->Session->read('Auth.User');
 
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
         $user_details = $this->User->find('first', array(
-            'conditions' => array('User.id' => $current_user['User']['id'])
+            'conditions' => array('User.id' => $user_check['id'])
         ));
 
         // format datetime values

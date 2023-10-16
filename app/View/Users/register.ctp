@@ -1,9 +1,15 @@
 <div class="container pt-3">
 
 
+    <?php
+    // if ($this->Session->flash('flash')) {
+    echo $this->Session->flash('flash');
+    // }
+    ?>
+
     <h2>Register</h2>
 
-    <form class="register-form" method="POST">
+    <form id="register-form" action="/message_board/users/register_request" class="register-form" method="POST">
         <div class="validation-errors">
             <div class="row">
                 <small id="name_valid" class="form-text text-danger invalid-feedback">
@@ -74,7 +80,7 @@
         <div class="row pt-3">
             <div class="col-6 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success px-4" id="registerBtn">
-                    Login
+                    Register
                 </button>
             </div>
 

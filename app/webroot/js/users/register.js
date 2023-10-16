@@ -23,7 +23,8 @@ $(document).ready(function () {
 	});
 
 	// Submit button
-	$("#registerBtn").click(function () {
+	$("#registerBtn").click(function (e) {
+		e.preventDefault();
 		validateName();
 		validatePassword();
 		validateConfirmPassword();
@@ -42,15 +43,16 @@ $(document).ready(function () {
 				password: password,
 			};
 
-			$.ajax({
-				url: "register",
-				type: "POST",
-				data: register_data,
-				dataType: "json",
-				success: function (data) {
-					console.log("Done");
-				},
-			});
+			// $.ajax({
+			// 	url: "register_request",
+			// 	type: "POST",
+			// 	data: register_data,
+			// 	dataType: "json",
+			// 	success: function (data) {
+			// 		console.log("Done");
+			// 	},
+			// });
+			$("#register-form").submit();
 		} else {
 			return false;
 		}
