@@ -7,7 +7,7 @@ $(document).ready(function () {
 	});
 
 	$.ajax({
-		url: "../users/get_users", // users/get_users
+		url: `${window.location.origin}/message_board/users/get_users`, // users/get_users
 		method: "get",
 		dataType: "json",
 		success: function (users) {

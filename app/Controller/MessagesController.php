@@ -67,7 +67,7 @@ class MessagesController extends Controller
                     $message_data['content'] = $message['content'];
                     $message_data['time_sent'] = $current_date_time;
 
-                    if ($this->Conversation->save($conversation)) {
+                    if ($this->Message->save($message_data)) {
                         $this->Session->setFlash('Successfully sent message!');
                         $this->redirect(array('action' => 'index'));
                     } else {
