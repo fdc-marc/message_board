@@ -128,8 +128,10 @@ class UsersController extends Controller
     {
         $current_user = $this->Session->read('Auth.User');
 
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
         $user_details = $this->User->find('first', array(
-            'conditions' => array('User.id' => $current_user['User']['id'])
+            'conditions' => array('User.id' => $user_check['id'])
         ));
 
 
@@ -187,8 +189,10 @@ class UsersController extends Controller
     {
         $current_user = $this->Session->read('Auth.User');
 
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
         $user_details = $this->User->find('first', array(
-            'conditions' => array('User.id' => $current_user['User']['id'])
+            'conditions' => array('User.id' => $user_check['id'])
         ));
 
         $this->set('user', $user_details['User']);
@@ -208,10 +212,47 @@ class UsersController extends Controller
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {
                     $this->Flash->error('Failed to update email!');
+                    $this->redirect(array('action' => 'edit_email'));
                 }
             } else {
                 // Data failed validation
                 $this->Flash->error('Validation failed. Please check the form for errors.');
+                $this->redirect(array('action' => 'edit_email'));
+            }
+        }
+    }
+
+    public function edit_password()
+    {
+        $current_user = $this->Session->read('Auth.User');
+
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $user_check['id'])
+        ));
+
+        $this->set('user', $user_details['User']);
+    }
+
+    public function edit_password_request()
+    {
+        if ($this->request->is('post')) {
+
+            $password_data = $this->request->data;
+            $this->User->set($password_data);
+
+            if ($password_data['password'] == $password_data['confirmPassword']) {
+                if ($this->User->save($password_data)) {
+                    $this->Flash->success('Successfully changed password!');
+                    $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+                } else {
+                    $this->Flash->error('Failed to change password!');
+                    $this->redirect(array('action' => 'edit_password'));
+                }
+            } else {
+                $this->Flash->error('Your passwords did not match.');
+                $this->redirect(array('action' => 'edit_password'));
             }
         }
     }

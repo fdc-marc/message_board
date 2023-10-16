@@ -13,9 +13,9 @@
             </div>
 
             <div class="col-9 d-flex align-items-center justify-content-end">
-                <?php echo $this->Html->link('Profile', array('controller' => 'Users', 'action' => 'profile'), ['class' => 'btn btn-light']); ?>
-                <?php echo $this->Html->link('Change Email', array('controller' => 'Users', 'action' => 'edit_email'), ['class' => 'btn btn-light']); ?>
-                <?php echo $this->Html->link('Change Password', array('controller' => 'Users', 'action' => 'profile'), ['class' => 'btn btn-light']); ?>
+                <?php echo $this->Html->link('Profile', array('controller' => 'Users', 'action' => 'profile'), ['class' => 'btn btn-dark']); ?>
+                <?php echo $this->Html->link('Change Email', array('controller' => 'Users', 'action' => 'edit_email'), ['class' => 'btn btn-secondary']); ?>
+                <?php echo $this->Html->link('Change Password', array('controller' => 'Users', 'action' => 'edit_password'), ['class' => 'btn btn-info']); ?>
             </div>
 
         </div>
@@ -80,7 +80,7 @@
 
 
 
-            <button type="submit" class="btn btn-light px-3">Update</button>
+            <button type="submit" class="btn btn-success px-3">Update</button>
         </form>
     </div>
 </div>
