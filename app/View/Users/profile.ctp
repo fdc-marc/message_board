@@ -12,7 +12,12 @@
                 <h2>User Profile</h2>
             </div>
 
-            <div class="col-9 d-flex align-items-center justify-content-end">
+            <div class="col-5 d-flex align-items-center justify-content-end">
+                <?php echo $this->Html->link('<i class="fa-solid fa-envelope"></i> Messages', array('controller' => 'messages', 'action' => 'index'), ['class' => 'btn btn-success px-3 py-2', 'escape' => false]); ?>
+            </div>
+
+            <div class="col-4 d-flex align-items-center justify-content-end">
+
                 <?php echo $this->Html->link('Edit Profile', array('controller' => 'Users', 'action' => 'edit'), ['class' => 'btn btn-dark']); ?>
                 <?php echo $this->Html->link('Change Email', array('controller' => 'Users', 'action' => 'edit_email'), ['class' => 'btn btn-secondary']); ?>
                 <?php echo $this->Html->link('Change Password', array('controller' => 'Users', 'action' => 'edit_password'), ['class' => 'btn btn-info']); ?>
@@ -20,7 +25,7 @@
 
         </div>
 
-        <div class="row pt-3">
+        <div class="row pt-5">
             <div class="col-4 d-flex justify-content-center align-items-center">
                 <div class="profile-img">
                     <?php

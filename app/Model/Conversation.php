@@ -21,7 +21,6 @@
  */
 
 App::uses('AppModel', 'Model');
-App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 
 /**
  * Application model for Cake.
@@ -31,37 +30,7 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
  *
  * @package       app.Model
  */
-class User extends Model
+class Conversation extends Model
 {
-
-    public $hasMany = array(
-        'Message' => array(
-            'className' => 'Message',
-            'foreignKey' => 'id'
-        ),
-        'Conversation' => array(
-            'className' => 'Conversation',
-            'foreignKey' => 'id'
-        )
-    );
-
-    public $validate = array(
-        'email' => array(
-            'unique' => array(
-                'rule' => 'isUnique',
-                'message' => 'Email address is already in use.'
-            )
-        ),
-    );
-
-    public function beforeSave($options = array())
-    {
-        if (!empty($this->data[$this->alias]['password'])) {
-            $passwordHasher = new SimplePasswordHasher(array('hashType' => 'sha256'));
-            $this->data[$this->alias]['password'] = $passwordHasher->hash(
-                $this->data[$this->alias]['password']
-            );
-        }
-        return true;
-    }
+    // public $belongsTo = 'User';
 }

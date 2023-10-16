@@ -31,6 +31,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	// echo $this->Html->meta('icon');
 	// echo $this->Html->css('cake.generic');
 	echo $this->Html->css('users');
+	echo $this->Html->css('messages');
 
 	echo $this->fetch('meta');
 	echo $this->fetch('css');
@@ -40,6 +41,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
 
@@ -73,7 +75,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<?php
 					if ($this->Session->check('Auth.User')) :
 						$current_user = $this->Session->read('Auth.User');
-						echo $current_user['name'] ?? $current_user['User']['name'];
+						// echo $current_user['name'] ?? $current_user['User']['name'];
+						$user_icon = '<i class="fa-regular fa-user"></i>';
+						echo $this->Html->link($current_user['name'] ?? $user_icon . $current_user['User']['name'], array('controller' => 'Users', 'action' => 'profile'), ['class' => 'text-decoration-none px-3', 'escape' => false]);
 						echo $this->Html->link('Logout', array('controller' => 'Users', 'action' => 'logout'), ['class' => 'px-3']);
 					else :
 						echo $this->Html->link('Login', array('controller' => 'Users', 'action' => 'login'), ['class' => 'px-3']);
@@ -116,8 +120,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?= $this->Html->script('users/register.js'); ?>
 <?= $this->Html->script('users/login.js'); ?>
 <?= $this->Html->script('users/edit.js'); ?>
+<?= $this->Html->script('users/messages.js'); ?>
 
 </html>

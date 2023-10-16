@@ -1,0 +1,36 @@
+.sender-convo-container, .receiver-convo-container {
+    
+    /* padding: 0px 12px; */
+    
+    height: 110px;
+    overflow: hidden;
+    /* padding-top: 15px */
+    background-color: #f1f1f1;
+    margin-top: 15px;
+}
+
+.convo-img {
+    height: 110px;
+    width: 110px;
+    border: 1px solid #111
+}
+
+.convo-content{
+    min-height: 80px;
+    border: 1px solid #111;
+}
+
+.convo-footer {
+    height: 30px;
+    border: 1px solid #111
+}
+
+.add-recipient {
+    height: 30px;
+}
+
+.dropdown-img {
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+}

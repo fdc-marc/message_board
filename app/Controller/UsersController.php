@@ -5,6 +5,22 @@ App::uses('AppController', 'Controller');
 class UsersController extends Controller
 {
 
+    public function get_users()
+    {
+
+        // get current user
+        $current_user = $this->Session->read('Auth.User');
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+        $users = $this->User->find('all', array(
+            'conditions' => array('User.id NOT' => $user_check['id'])
+        ));
+
+        $this->autoRender = false;
+
+        echo json_encode($users);
+    }
+
     public function login()
     {
     }

@@ -48,7 +48,8 @@
             <div class="row pt-2">
                 <div class="col-12">
                     <h6>Birthdate: </h6>
-                    <input type="" id="birthdate" name="birthdate" class="form-control" value="<?php echo $user['birthdate'] ?>">
+                    <input type="" id="birthdate" name="birthdate" class="form-control" value="<?php echo $user['birthdate'] === "01/01/1970" ? "mm/dd/yyyy" : $user['birthdate'] ?>">
+
                 </div>
             </div>
             <div class="row pt-2">
