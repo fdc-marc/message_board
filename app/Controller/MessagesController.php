@@ -3,9 +3,9 @@ date_default_timezone_set('Asia/Singapore');
 
 App::uses('AppController', 'Controller');
 
-class MessagesController extends Controller
+class MessagesController extends AppController
 {
-
+    public $components = array('Paginator');
 
     public function index()
     {
@@ -13,13 +13,39 @@ class MessagesController extends Controller
         $this->loadModel('Conversation');
         $this->loadModel('User');
 
+
         $current_user = $this->Session->read('Auth.User');
         $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
-        // $perPage = 10;
-        // $offset = ($data['page'] - 1) * $perPage;
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $user_check['id'])
+        ));
 
-        $conversations = $this->Conversation->find('all', array(
+        // $data = $this->request->data;
+
+        // $conversations = $this->Conversation->find('all', array(
+        //     'conditions' => array(
+        //         'OR' => array(
+        //             array(
+        //                 'Conversation.user1' => $user_check['id']
+        //             ),
+        //             array(
+        //                 'Conversation.user2' => $user_check['id']
+        //             )
+        //         )
+        //     ),
+        //     'order' => 'Conversation.latest_message_time DESC',
+        //     'contain' => array(
+        //         'Message' => array(
+        //             'order' => array('Message.time_sent DESC'),
+        //             'limit' => 1,
+        //             'User'
+        //         )
+        //     )
+        // ));
+
+        // $this->Paginator->settings = $this->paginate;
+        $this->Paginator->settings = array(
             'conditions' => array(
                 'OR' => array(
                     array(
@@ -37,8 +63,11 @@ class MessagesController extends Controller
                     'limit' => 1,
                     'User'
                 )
-            )
-        ));
+            ),
+            'limit' => 10
+
+        );
+        $conversations = $this->Paginator->paginate('Conversation');
 
         // get user from latest message of the convo
         foreach ($conversations as &$conversation) {
@@ -67,18 +96,30 @@ class MessagesController extends Controller
         }
 
         // var_dump($conversations);
-        $this->set('conversations', $conversations);
+
+        // $this->set('conversations', $conversations);
+        $this->set(compact('conversations'));
+        $this->set('user', $user_details['User']);
     }
 
     public function view($id = null)
     {
         // get all messages by conversation_id
-        $messages = $this->Message->find('all', array(
+        // $messages = $this->Message->find('all', array(
+        //     'conditions' => array('Message.conversation_id' => $id),
+        //     'order' => 'Message.time_sent DESC',
+        // ));
+
+        $this->Paginator->settings = array(
             'conditions' => array('Message.conversation_id' => $id),
             'order' => 'Message.time_sent DESC',
-        ));
+            'limit' => 10
+        );
+        $messages = $this->Paginator->paginate('Message');
 
-        $this->set('messages', $messages);
+        // $this->set('messages', $messages);
+        $this->set(compact('messages'));
+
         // var_dump($messages);
     }
 

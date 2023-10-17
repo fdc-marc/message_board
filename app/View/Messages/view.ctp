@@ -1,5 +1,5 @@
 <?php
-
+$paginator = $this->Paginator;
 $current_user = $this->Session->read('Auth.User');
 $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
@@ -12,10 +12,17 @@ $msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $us
 <div class="container py-3">
 
 
+    <div class="row">
+        <div class="col-6">
+            <h1>
+                Message Detail
+            </h1>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-center">
+            <?php echo $this->Html->link('Back to Message List', array('controller' => 'messages', 'action' => 'index'), ['class' => 'btn btn-dark']); ?>
+        </div>
+    </div>
 
-    <h1>
-        Message Detail
-    </h1>
 
     <div class="row py-3">
         <div class="col-6"></div>
@@ -104,5 +111,33 @@ $msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $us
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
+
+        <?php
+        // pagination section
+        echo "<div class='paging'>";
+
+        // the 'first' page button
+        echo $paginator->first("First");
+
+        // 'prev' page button, 
+        // we can check using the paginator hasPrev() method if there's a previous page
+        // save with the 'next' page button
+        if ($paginator->hasPrev()) {
+            echo $paginator->prev("Prev");
+        }
+
+        // the 'number' page buttons
+        echo $paginator->numbers(array('modulus' => 2));
+
+        // for the 'next' button
+        if ($paginator->hasNext()) {
+            echo $paginator->next("Next");
+        }
+
+        // the 'last' page button
+        echo $paginator->last("Last");
+
+        echo "</div>";
+        ?>
     </div>
 </div>

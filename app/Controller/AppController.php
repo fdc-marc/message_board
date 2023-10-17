@@ -64,7 +64,7 @@ class AppController extends Controller
                 )
             )
         ),
-        'Url'
+
     );
 
     public function isAuthorized($user)

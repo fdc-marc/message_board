@@ -34,3 +34,35 @@
     width: 20px;
     padding: 3px;
 }
+
+/* Pagination styles */
+.paging {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.paging a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.paging a:hover {
+    background-color: #0056b3;
+}
+
+.paging .disabled {
+    pointer-events: none;
+    background-color: #ccc;
+    color: #666;
+}
+
+.paging .current {
+    background-color: #0056b3;
+    color: #fff;
+}
+

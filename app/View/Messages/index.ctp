@@ -1,9 +1,9 @@
 <div class="container py-3">
     <?php
     echo $this->Session->flash('flash');
-
-    $current_user = $this->Session->read('Auth.User');
-    $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+    $paginator = $this->Paginator;
+    // $current_user = $this->Session->read('Auth.User');
+    // $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
     ?>
 
 
@@ -23,7 +23,7 @@
         // var_dump($conversation);
 
         $convo_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
-        if ($latest_message['user_id'] != $user_check['id']) :
+        if ($latest_message['user_id'] != $user['id']) :
     ?>
             <!-- if last message sent was from other person -->
             <div class="convo-container">
@@ -89,6 +89,34 @@
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
+
+    <?php
+    // pagination section
+    echo "<div class='paging'>";
+
+    // the 'first' page button
+    echo $paginator->first("First");
+
+    // 'prev' page button, 
+    // we can check using the paginator hasPrev() method if there's a previous page
+    // save with the 'next' page button
+    if ($paginator->hasPrev()) {
+        echo $paginator->prev("Prev");
+    }
+
+    // the 'number' page buttons
+    echo $paginator->numbers(array('modulus' => 2));
+
+    // for the 'next' button
+    if ($paginator->hasNext()) {
+        echo $paginator->next("Next");
+    }
+
+    // the 'last' page button
+    echo $paginator->last("Last");
+
+    echo "</div>";
+    ?>
 
 
 
