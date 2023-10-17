@@ -33,4 +33,11 @@ App::uses('AppModel', 'Model');
 class Conversation extends Model
 {
     // public $belongsTo = 'User';
+    public $hasMany = array(
+        'Message' => array(
+            'className' => 'Message',
+            'foreignKey' => 'conversation_id',
+            'order' => 'Message.time_sent DESC'
+        )
+    );
 }

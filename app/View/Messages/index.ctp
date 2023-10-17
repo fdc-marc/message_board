@@ -2,6 +2,8 @@
     <?php
     // if ($this->Session->flash('flash')) :
     echo $this->Session->flash('flash');
+    $current_user = $this->Session->read('Auth.User');
+    $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
     ?>
 
 
@@ -13,69 +15,83 @@
         </div>
     </div>
 
+    <?php
+    foreach ($conversations as $conversation) :
+        $latest_message = $conversation['Message'][0];
+        $user_image = $conversation['User']['photo'];
+        $conversation_id = $conversation['Conversation']['id'];
 
-    <div class="sender-convo-container">
-        <div class="row">
-            <div class="col-1 px-0">
-                <img class="convo-img" src="<?php echo $this->webroot; ?>img/empty-image.jpeg">
-            </div>
-            <div class="col-11">
-                <div class="row convo-content p-3">
-                    <div class="col-12 d-flex align-items-center">
-                        <p class="text-truncate mb-0">
-                            New Message button will link to add new message page
-                            List the new message by conversations into chronological order.
-                            Show more link is just like pagination. by click on it should generate next 10 items.
-                            Delete (AJAX) - when clicking the delete button the message will fadeout and remove in the row and it should delete also all conversation (Child tables)
-                            New Message button will link to add new message page
-                            List the new message by conversations into chronological order.
-                            Show more link is just like pagination. by click on it should generate next 10 items.</p>
+        $convo_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
+        if ($latest_message['user_id'] == $user_check['id']) :
+    ?>
+            <!-- if last message sent was from user -->
+            <div class="convo-container">
 
+                <div class="row">
+                    <div class="col-1 px-0">
+                        <img class="convo-img" src="<?php echo $convo_image; ?>">
                     </div>
+                    <div class="col-11">
+                        <div class="row convo-content p-3">
+                            <div class="col-12 d-flex align-items-center">
+                                <p class="text-truncate mb-0">
+                                    <?php echo $latest_message['content'] ?></p>
+                            </div>
 
-                </div>
-                <div class="row convo-footer px-3">
-                    <div class="col-12 d-flex justify-content-end">
-                        2014/08/04 03:20
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="receiver-convo-container">
-        <div class="row">
-
-            <div class="col-11">
-                <div class="row convo-content p-3">
-                    <div class="col-12 d-flex align-items-center">
-                        <p class="text-truncate mb-0">
-                            New Message button will link to add new message page
-                            List the new message by conversations into chronological order.
-                            Show more link is just like pagination. by click on it should generate next 10 items.
-                            Delete (AJAX) - when clicking the delete button the message will fadeout and remove in the row and it should delete also all conversation (Child tables)
-                            New Message button will link to add new message page
-                            List the new message by conversations into chronological order.
-                            Show more link is just like pagination. by click on it should generate next 10 items.</p>
-
-                    </div>
-
-                </div>
-                <div class="row convo-footer px-3">
-                    <div class="col-12 d-flex justify-content-end">
-                        <p>
-                            2014/08/04 03:20
-                        </p>
-
+                        </div>
+                        <div class="row convo-footer px-3">
+                            <div class="col-6 d-flex justify-content-start align-items-center">
+                                <?php echo $this->Html->link('View', array('controller' => 'messages', 'action' => 'view', $conversation_id), ['class' => 'btn btn-info btn-sm viewConvoBtn']); ?>
+                                <button id="" class="btn btn-danger btn-sm deleteConvoBtn" data-convo-id="<?php echo $conversation_id ?>">Delete</button>
+                            </div>
+                            <div class=" col-6 d-flex justify-content-end align-items-center">
+                                <?php echo $latest_message['time_sent'] ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
-            <div class="col-1 px-0">
-                <img class="convo-img" src="<?php echo $this->webroot; ?>img/empty-image.jpeg">
+
+        <?php else : ?>
+            <!-- if last message sent was from other person -->
+            <div class="convo-container">
+
+                <div class="row">
+
+                    <div class="col-11">
+                        <div class="row convo-content p-3">
+                            <div class="col-12 d-flex align-items-center">
+                                <p class="text-truncate mb-0">
+                                    <?php echo $latest_message['content'] ?>
+                                </p>
+
+                            </div>
+
+                        </div>
+                        <div class="row convo-footer px-3">
+                            <div class="col-12 d-flex justify-content-end">
+                                <div class="col-6 d-flex justify-content-start align-items-center">
+                                    <?php echo $this->Html->link('View', array('controller' => 'messages', 'action' => 'view', $conversation_id), ['class' => 'btn btn-info btn-sm viewConvoBtn']); ?>
+                                    <button id="" class="btn btn-danger btn-sm deleteConvoBtn" data-convo-id="<?php echo $conversation_id ?>">Delete</button>
+                                </div>
+                                <div class="col-6 d-flex justify-content-end align-items-center">
+                                    <?php echo $latest_message['time_sent'] ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1 px-0">
+                        <img class="convo-img" src="<?php echo $convo_image; ?>">
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+
+
+
 
 
 </div>

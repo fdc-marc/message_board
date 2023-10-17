@@ -32,5 +32,8 @@ App::uses('AppModel', 'Model');
  */
 class Message extends Model
 {
-    public $belongsTo = array('User', 'Conversation');
+    public $belongsTo = array('User' => array(
+        'className' => 'User',
+        'foreignKey' => 'user_id'
+    ), 'Conversation');
 }

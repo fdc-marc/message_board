@@ -37,7 +37,7 @@ class User extends Model
     public $hasMany = array(
         'Message' => array(
             'className' => 'Message',
-            'foreignKey' => 'id'
+            // 'foreignKey' => 'user_id'
         ),
         'Conversation' => array(
             'className' => 'Conversation',

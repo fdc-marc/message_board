@@ -1,4 +1,4 @@
-.sender-convo-container, .receiver-convo-container {
+.sender-convo-container, .receiver-convo-container, .convo-container {
     
     /* padding: 0px 12px; */
     
@@ -16,12 +16,12 @@
 }
 
 .convo-content{
-    min-height: 80px;
+    min-height: 70px;
     border: 1px solid #111;
 }
 
 .convo-footer {
-    height: 30px;
+    height: 40px;
     border: 1px solid #111
 }
 

@@ -5,11 +5,13 @@ App::uses('AppController', 'Controller');
 class MessagesController extends Controller
 {
 
+
     public function index()
     {
-        // get all conversations by user id
-        // display with pagination in view
+
         $this->loadModel('Conversation');
+        $this->loadModel('User');
+
         $current_user = $this->Session->read('Auth.User');
         $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
@@ -23,11 +25,50 @@ class MessagesController extends Controller
                         'Conversation.user2' => $user_check['id']
                     )
                 )
+            ),
+            'order' => 'Conversation.latest_message_time DESC',
+            'contain' => array(
+                'Message' => array(
+                    'order' => array('Message.time_sent DESC'),
+                    'limit' => 1,
+                    'User'
+                )
             )
         ));
 
+        // get user from latest message of the convo
+        foreach ($conversations as &$conversation) {
+            $latest_message_user = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.id' => $conversation['Message'][0]['user_id']
+                ),
+                'fields' => array(
+                    'User.id',
+                    'User.name',
+                    'User.email',
+                    'User.photo',
+                )
+
+            ));
+
+            if ($latest_message_user) {
+                $user = array(
+                    'id' => $latest_message_user['User']['id'],
+                    'name' => $latest_message_user['User']['name'],
+                    'email' => $latest_message_user['User']['email'],
+                    'photo' => $latest_message_user['User']['photo']
+                );
+                $conversation['User'] = $user;
+            }
+        }
+
+        // var_dump($conversations);
         $this->set('conversations', $conversations);
-        var_dump($conversations);
+    }
+
+    public function view($id = null)
+    {
+        // get all messages by conversation_id
     }
 
     public function create()
@@ -41,12 +82,17 @@ class MessagesController extends Controller
             $this->loadModel('Conversation');
 
             $message = $this->request->data;
-            // var_dump($message);
+
 
             $current_user = $this->Session->read('Auth.User');
             $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
             $current_date_time =  date('Y-m-d H:i:s');
+
+            $message_data['content'] = $message['content'];
+            $message_data['time_sent'] = $current_date_time;
+            $message_data['user_id'] = $user_check['id'];
+            $message_data['receiver_id'] = $message['recipient'];
 
             // Check if users has existing convo
             $existingConvo = $this->Conversation->find('first', array(
@@ -70,6 +116,15 @@ class MessagesController extends Controller
 
             // convo already exists
             if ($existingConvo) {
+                $message_data['conversation_id'] = $existingConvo['Conversation']['id'];
+
+                if ($this->Message->save($message_data)) {
+                    $this->Session->setFlash('Successfully sent message!');
+                    $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                } else {
+                    $this->Session->setFlash('Failed to send message!');
+                    $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                }
             } else { // convo does not exist
                 // insert conversation entry
                 $this->Conversation->create();
@@ -80,11 +135,8 @@ class MessagesController extends Controller
 
                 if ($this->Conversation->save($conversation)) {
                     // insert message
-                    $message_data['sender_id'] = $user_check['id'];
-                    $message_data['receiver_id'] = $message['recipient'];
+
                     $message_data['conversation_id'] = $this->Conversation->getInsertID();
-                    $message_data['content'] = $message['content'];
-                    $message_data['time_sent'] = $current_date_time;
 
                     if ($this->Message->save($message_data)) {
                         $this->Session->setFlash('Successfully sent message!');
@@ -99,25 +151,20 @@ class MessagesController extends Controller
                 }
             }
         }
+    }
 
-        // get sender_id & receiver_id
-        // check if convo exists between sender and receiver
-        // if existing => add message to existing conversation
-        // if NOT existing => create conversation and insert message
-        // Conversation details:
-        // {
-        // user1: 1,
-        // user2: 2,
-        // latest_message_datetime: "2014/08/04 03:20"
-        // }
-        //Message details:
-        // {
-        //     conversation_id: 1,
-        //     content: "Hello",
-        //     sender: 1,
-        //     receiver: 2,
-        //     time_sent: "2014/08/04 03:20"
-        // } 
+    public function delete_conversation()
+    {
+        if ($this->request->is('post')) {
+            $this->loadModel('Conversation');
 
+            if ($this->Conversation->delete($this->request->data, true)) {
+                echo json_encode(true);
+            } else {
+                echo json_encode(false);
+            }
+
+            $this->autoRender = false;
+        }
     }
 }

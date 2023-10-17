@@ -21,6 +21,8 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('SessionComponent', 'Controller/Component');
+App::uses('AuthComponent', 'Controller/Component');
 
 
 /**
@@ -80,15 +82,5 @@ class AppController extends Controller
 
         // $this->set('logged_in', $this->Auth->loggedIn());
         // $this->set('current_user', $this->Auth->user());
-    }
-
-    public function beforeRender()
-    {
-        parent::beforeRender();
-        $autocomplete = $this->User->find('all', array(
-            'fields' => array('User.username')
-        ));
-
-        $this->set('autocomplete', $autocomplete);
     }
 }

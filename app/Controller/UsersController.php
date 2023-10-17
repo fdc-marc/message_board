@@ -4,6 +4,16 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends Controller
 {
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+
+        // Check the session condition
+        if ($this->Session->read('logged_in') == true) {
+            // Disable the specific action(s)
+            $this->Auth->allow('profile', 'edit', 'edit_profile', 'edit_password', 'edit_password_request', 'edit_email', 'edit_email_request');
+        }
+    }
 
     public function get_users()
     {
@@ -48,7 +58,11 @@ class UsersController extends Controller
                 $passwordHasher = new SimplePasswordHasher(array('hashType' => 'sha256'));
 
                 if ($passwordHasher->check($login_req['login_password'], $user['User']['password'])) {
-                    $user_update['last_login_date'] = date('Y-m-d H:i:s');
+
+                    $user_update = array(
+                        'id' => $user['User']['id'],
+                        'last_login_date' => date('Y-m-d H:i:s')
+                    );
 
                     if ($this->User->save($user_update)) {
                         $this->Session->write('Auth.User', $user);
