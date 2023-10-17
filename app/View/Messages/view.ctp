@@ -2,6 +2,11 @@
 
 $current_user = $this->Session->read('Auth.User');
 $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+$sender_id = $messages[0]['Conversation']['user1'] == $user_check['id'] ? $messages[0]['Conversation']['user1'] : $messages[0]['Conversation']['user2'];
+$receiver_id = $messages[0]['Conversation']['user1'] == $sender_id ? $messages[0]['Conversation']['user2'] : $messages[0]['Conversation']['user1'];
+
+$msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $user_check['photo'] : $this->webroot . 'img/empty-image.jpeg';
 ?>
 
 <div class="container py-3">
@@ -22,7 +27,7 @@ $user_check = isset($current_user['User']) ? $current_user['User'] : $current_us
 
     <div class="row pb-3">
         <div class="col-12 d-flex justify-content-end">
-            <?php echo $this->Html->link('Reply Message', array('controller' => 'messages', 'action' => 'create'), ['class' => 'btn btn-success px-3 py-2']); ?>
+            <button class="btn btn-success replyMessageBtn" data-convo-id="<?php echo $messages[0]['Conversation']['id'] ?> " data-user-id="<?php echo $sender_id ?>" data-receiver-id="<?php echo $receiver_id ?>" data-msg-img="<?php echo $msg_image ?>">Reply Message</button>
         </div>
     </div>
 
@@ -37,7 +42,7 @@ $user_check = isset($current_user['User']) ? $current_user['User'] : $current_us
 
             if ($message['Message']['user_id'] != $user_check['id']) :
         ?>
-                <!-- if last message sent was from user -->
+                <!-- if last message sent was from other person -->
                 <div class="convo-container">
 
                     <div class="row">
@@ -54,7 +59,7 @@ $user_check = isset($current_user['User']) ? $current_user['User'] : $current_us
                             </div>
                             <div class="row convo-footer px-3">
                                 <div class="col-6 d-flex justify-content-start align-items-center">
-                                    <button id="" class="btn btn-danger btn-sm deleteMessageBtn" data-convo-id="<?php echo $message['Message']['id'] ?>">Delete</button>
+                                    <button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="<?php echo $message['Message']['id'] ?>">Delete</button>
                                 </div>
                                 <div class=" col-6 d-flex justify-content-end align-items-center">
                                     <?php echo $message['Message']['time_sent'] ?>
@@ -66,7 +71,7 @@ $user_check = isset($current_user['User']) ? $current_user['User'] : $current_us
                 </div>
 
             <?php else : ?>
-                <!-- if last message sent was from other person -->
+                <!-- if last message sent was from user -->
                 <div class="convo-container">
 
                     <div class="row">
@@ -84,7 +89,7 @@ $user_check = isset($current_user['User']) ? $current_user['User'] : $current_us
                             <div class="row convo-footer px-3">
                                 <div class="col-12 d-flex justify-content-end">
                                     <div class="col-6 d-flex justify-content-start align-items-center">
-                                        <button id="" class="btn btn-danger btn-sm deleteMessageBtn" data-convo-id="<?php echo $message['Message']['id'] ?>">Delete</button>
+                                        <button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="<?php echo $message['Message']['id'] ?>">Delete</button>
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
                                         <?php echo $message['Message']['time_sent'] ?>

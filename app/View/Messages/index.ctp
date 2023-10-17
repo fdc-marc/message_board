@@ -20,11 +20,12 @@
         $latest_message = $conversation['Message'][0];
         $user_image = $conversation['User']['photo'];
         $conversation_id = $conversation['Conversation']['id'];
+        // var_dump($conversation);
 
         $convo_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
         if ($latest_message['user_id'] != $user_check['id']) :
     ?>
-            <!-- if last message sent was from user -->
+            <!-- if last message sent was from other person -->
             <div class="convo-container">
 
                 <div class="row">
@@ -54,7 +55,7 @@
             </div>
 
         <?php else : ?>
-            <!-- if last message sent was from other person -->
+            <!-- if last message sent was from user -->
             <div class="convo-container">
 
                 <div class="row">

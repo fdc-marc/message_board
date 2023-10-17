@@ -79,7 +79,7 @@ class MessagesController extends Controller
         ));
 
         $this->set('messages', $messages);
-        var_dump($messages);
+        // var_dump($messages);
     }
 
     public function create()
@@ -129,12 +129,20 @@ class MessagesController extends Controller
             if ($existingConvo) {
                 $message_data['conversation_id'] = $existingConvo['Conversation']['id'];
 
-                if ($this->Message->save($message_data)) {
-                    $this->Session->setFlash('Successfully sent message!');
-                    $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
-                } else {
-                    $this->Session->setFlash('Failed to send message!');
-                    $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                // $conversation['latest_message_time'] = $current_date_time;
+                $conversation_update = array(
+                    'id' => $existingConvo['Conversation']['id'],
+                    'latest_message_time' => date('Y-m-d H:i:s')
+                );
+
+                if ($this->Conversation->save($conversation_update)) {
+                    if ($this->Message->save($message_data)) {
+                        $this->Session->setFlash('Successfully sent message!');
+                        $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                    } else {
+                        $this->Session->setFlash('Failed to send message!');
+                        $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                    }
                 }
             } else { // convo does not exist
                 // insert conversation entry
@@ -164,6 +172,43 @@ class MessagesController extends Controller
         }
     }
 
+    public function add_reply()
+    {
+        if ($this->request->is('post')) {
+            $this->loadModel('Conversation');
+
+            $data = $this->request->data;
+            $current_date_time =  date('Y-m-d H:i:s');
+
+
+            // update conversation latest_message_time
+            $conversation_update = array(
+                'id' => $data['conversation_id'],
+                'latest_message_time' => $current_date_time
+            );
+
+            if ($this->Conversation->save($conversation_update)) {
+                $message_data['user_id'] = $data['user_id'];
+                $message_data['receiver_id'] = $data['receiver_id'];
+                $message_data['conversation_id'] = $data['conversation_id'];
+                $message_data['content'] = $data['content'];
+                $message_data['time_sent'] = $current_date_time;
+
+                if ($this->Message->save($message_data)) {
+                    // pass message data back to view
+                    $data['id'] = $this->Message->getInsertID();
+                    $data['time_sent'] = $current_date_time;
+                    echo json_encode($data);
+                } else {
+                    echo json_encode(false);
+                }
+            }
+
+            $this->autoRender = false;
+            exit;
+        }
+    }
+
     public function delete_conversation()
     {
         if ($this->request->is('post')) {
@@ -185,6 +230,21 @@ class MessagesController extends Controller
             }
 
             $this->autoRender = false;
+            exit;
+        }
+    }
+
+    public function delete_message()
+    {
+        if ($this->request->is('post')) {
+            if ($this->Message->delete($this->request->data['id'])) {
+                echo json_encode(true);
+            } else {
+                echo json_encode(false);
+            }
+
+            $this->autoRender = false;
+            exit;
         }
     }
 }
