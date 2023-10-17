@@ -48,11 +48,15 @@ class UsersController extends Controller
                 $passwordHasher = new SimplePasswordHasher(array('hashType' => 'sha256'));
 
                 if ($passwordHasher->check($login_req['login_password'], $user['User']['password'])) {
-                    $this->Session->write('Auth.User', $user);
-                    $this->Session->setFlash('Successfully logged in!');
+                    $user_update['last_login_date'] = date('Y-m-d H:i:s');
 
-                    $this->set('user', $user['User']);
-                    $this->redirect(array('action' => 'profile'));
+                    if ($this->User->save($user_update)) {
+                        $this->Session->write('Auth.User', $user);
+                        $this->Session->setFlash('Successfully logged in!');
+
+                        $this->set('user', $user['User']);
+                        $this->redirect(array('action' => 'profile'));
+                    }
                 } else {
                     $this->Session->setFlash('Invalid username or password');
                     $this->redirect(array('action' => 'login'));

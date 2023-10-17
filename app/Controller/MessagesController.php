@@ -9,6 +9,25 @@ class MessagesController extends Controller
     {
         // get all conversations by user id
         // display with pagination in view
+        $this->loadModel('Conversation');
+        $current_user = $this->Session->read('Auth.User');
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+        $conversations = $this->Conversation->find('all', array(
+            'conditions' => array(
+                'OR' => array(
+                    array(
+                        'Conversation.user1' => $user_check['id']
+                    ),
+                    array(
+                        'Conversation.user2' => $user_check['id']
+                    )
+                )
+            )
+        ));
+
+        $this->set('conversations', $conversations);
+        var_dump($conversations);
     }
 
     public function create()
