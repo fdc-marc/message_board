@@ -1,7 +1,7 @@
 <div class="container py-3">
     <?php
-    // if ($this->Session->flash('flash')) :
     echo $this->Session->flash('flash');
+
     $current_user = $this->Session->read('Auth.User');
     $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
     ?>
@@ -22,7 +22,7 @@
         $conversation_id = $conversation['Conversation']['id'];
 
         $convo_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
-        if ($latest_message['user_id'] == $user_check['id']) :
+        if ($latest_message['user_id'] != $user_check['id']) :
     ?>
             <!-- if last message sent was from user -->
             <div class="convo-container">

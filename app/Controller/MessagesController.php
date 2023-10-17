@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Singapore');
 
 App::uses('AppController', 'Controller');
 
@@ -14,6 +15,9 @@ class MessagesController extends Controller
 
         $current_user = $this->Session->read('Auth.User');
         $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+        // $perPage = 10;
+        // $offset = ($data['page'] - 1) * $perPage;
 
         $conversations = $this->Conversation->find('all', array(
             'conditions' => array(
@@ -69,6 +73,13 @@ class MessagesController extends Controller
     public function view($id = null)
     {
         // get all messages by conversation_id
+        $messages = $this->Message->find('all', array(
+            'conditions' => array('Message.conversation_id' => $id),
+            'order' => 'Message.time_sent DESC',
+        ));
+
+        $this->set('messages', $messages);
+        var_dump($messages);
     }
 
     public function create()
@@ -159,6 +170,15 @@ class MessagesController extends Controller
             $this->loadModel('Conversation');
 
             if ($this->Conversation->delete($this->request->data, true)) {
+                // cascade delete did not work, so manually delete all messages here
+                $messages = $this->Message->find('all', array(
+                    'conditions' => array('Message.conversation_id' => $this->request->data['id'])
+                ));
+
+                foreach ($messages as $message) {
+                    $this->Message->delete($message['Message']['id']);
+                }
+
                 echo json_encode(true);
             } else {
                 echo json_encode(false);

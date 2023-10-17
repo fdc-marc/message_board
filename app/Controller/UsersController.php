@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Singapore');
 App::uses('AppController', 'Controller');
 
 class UsersController extends Controller
@@ -11,7 +11,7 @@ class UsersController extends Controller
         // Check the session condition
         if ($this->Session->read('logged_in') == true) {
             // Disable the specific action(s)
-            $this->Auth->allow('profile', 'edit', 'edit_profile', 'edit_password', 'edit_password_request', 'edit_email', 'edit_email_request');
+            // $this->Auth->allow('profile', 'edit', 'thank_you', 'edit_profile', 'edit_password', 'edit_password_request', 'edit_email', 'edit_email_request');
         }
     }
 
@@ -66,6 +66,7 @@ class UsersController extends Controller
 
                     if ($this->User->save($user_update)) {
                         $this->Session->write('Auth.User', $user);
+                        $this->Session->write('logged_in', true);
                         $this->Session->setFlash('Successfully logged in!');
 
                         $this->set('user', $user['User']);
@@ -114,6 +115,7 @@ class UsersController extends Controller
                 // Store user data in the session
                 $register_data['id'] = $this->User->getInsertID();
                 $this->Session->write('Auth.User', $register_data);
+                $this->Session->write('logged_in', true);
 
                 return $this->redirect(array('controller' => 'Users', 'action' => 'thank_you'));
                 // }
