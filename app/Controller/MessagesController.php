@@ -278,14 +278,15 @@ class MessagesController extends AppController
                     $this->Message->set($message_data);
                     if ($this->Message->validates()) {
                         if ($this->Message->save($message_data)) {
-                            $this->Session->setFlash('Successfully sent message!');
+
+                            $this->Session->setFlash('Successfully sent message!', 'default', array('class' => 'form-text text-success'));
                             $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
                         } else {
-                            $this->Session->setFlash('Failed to send message!');
+                            $this->Session->setFlash('Failed to send message!', 'default', array('class' => 'form-text text-danger'));
                             $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
                         }
                     } else {
-                        $this->Session->setFlash('Failed to send message!');
+                        $this->Session->setFlash('Failed to send message!', 'default', array('class' => 'form-text text-danger'));
                         $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
                     }
                 }
@@ -304,15 +305,17 @@ class MessagesController extends AppController
                     $this->Message->set($message_data);
                     if ($this->Message->validates()) {
                         if ($this->Message->save($message_data)) {
-                            $this->Session->setFlash('Successfully sent message!');
+
+                            $this->Session->setFlash('Successfully sent message!!', 'default', array('class' => 'form-text text-success'));
                             $this->redirect(array('action' => 'index'));
                         } else {
-                            $this->Session->setFlash('Error sending message!');
+
+                            $this->Session->setFlash('Error sending message!', 'default', array('class' => 'form-text text-danger'));
                             $this->redirect(array('action' => 'create'));
                         }
                     }
                 } else {
-                    $this->Session->setFlash('Error sending message!');
+                    $this->Session->setFlash('Error sending message!', 'default', array('class' => 'form-text text-danger'));
                     $this->redirect(array('action' => 'create'));
                 }
             }

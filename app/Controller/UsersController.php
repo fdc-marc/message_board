@@ -61,17 +61,17 @@ class UsersController extends AppController
                     if ($this->User->save($user_update)) {
                         $this->Session->write('Auth.User', $user);
                         $this->Session->write('logged_in', true);
-                        $this->Session->setFlash('Successfully logged in!');
+                        $this->Session->setFlash('Successfully logged in!', 'default', array('class' => 'form-text text-success'));
 
                         $this->set('user', $user['User']);
                         $this->redirect(array('action' => 'profile'));
                     }
                 } else {
-                    $this->Session->setFlash('Invalid username or password');
+                    $this->Session->setFlash('Invalid username or password!', 'default', array('class' => 'form-text text-danger'));
                     $this->redirect(array('action' => 'login'));
                 }
             } else {
-                $this->Session->setFlash('Invalid username or password');
+                $this->Session->setFlash('Invalid username or password!', 'default', array('class' => 'form-text text-danger'));
                 $this->redirect(array('action' => 'login'));
             }
         }
@@ -101,7 +101,7 @@ class UsersController extends AppController
             var_dump($existingUser);
 
             if ($existingUser) {
-                $this->Session->setFlash('Email address is already in use.', 'default', array('class' => 'form-text text-danger'));
+                $this->Session->setFlash('Email address is already in use!', 'default', array('class' => 'form-text text-danger'));
                 $this->redirect(array('action' => 'register'));
             }
 
@@ -114,7 +114,7 @@ class UsersController extends AppController
                 return $this->redirect(array('controller' => 'Users', 'action' => 'thank_you'));
                 // }
             } else {
-                $this->Session->setFlash(__('Registration Failed.'));
+                $this->Session->setFlash('Registration Failed.', 'default', array('class' => 'form-text text-danger'));
                 $this->redirect(array('action' => 'register'));
             }
         }
@@ -191,25 +191,29 @@ class UsersController extends AppController
                         // The file was successfully moved to the destination
                         $edit_data['photo'] = $file_new_name;
                         if ($this->User->save($edit_data)) {
-                            $this->Flash->success('Successfully updated profile!');
+
+                            $this->Session->setFlash('Successfully updated profile!', 'default', array('class' => 'form-text text-success'));
                             $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                         } else {
-                            $this->Flash->error('Failed to update profile!');
+
+                            $this->Session->setFlash('Failed to update profile!', 'default', array('class' => 'form-text text-danger'));
                         }
                     } else {
                         // Error moving the file
-                        $this->Session->setFlash('Error uploading file.', 'error');
+
+                        $this->Session->setFlash('Failed to update profile!', 'default', array('class' => 'form-text text-danger'));
                     }
                 } else {
                     // Handle the file upload error
-                    $this->Session->setFlash('File upload error.', 'error');
+                    $this->Session->setFlash('Failed to update profile!', 'default', array('class' => 'form-text text-danger'));
                 }
             } else {
                 if ($this->User->save($edit_data)) {
-                    $this->Flash->success('Successfully updated profile!');
+
+                    $this->Session->setFlash('Successfully updated profile!', 'default', array('class' => 'form-text text-success'));
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {
-                    $this->Flash->error('Failed to update profile!');
+                    $this->Session->setFlash('Failed to update profile!', 'default', array('class' => 'form-text text-danger'));
                 }
             }
         }
@@ -239,14 +243,15 @@ class UsersController extends AppController
 
                 if ($this->User->save($edit_data)) {
                     $this->Flash->success('Successfully updated email!');
+                    $this->Session->setFlash('Successfully updated email!', 'default', array('class' => 'form-text text-success'));
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {
-                    $this->Flash->error('Failed to update email!');
+                    $this->Session->setFlash('Failed to update email!', 'default', array('class' => 'form-text text-danger'));
                     $this->redirect(array('action' => 'edit_email'));
                 }
             } else {
                 // Data failed validation
-                $this->Flash->error('Validation failed. Please check the form for errors.');
+                $this->Session->setFlash('Email is already in use!', 'default', array('class' => 'form-text text-danger'));
                 $this->redirect(array('action' => 'edit_email'));
             }
         }
@@ -274,14 +279,16 @@ class UsersController extends AppController
 
             if ($password_data['password'] == $password_data['confirmPassword']) {
                 if ($this->User->save($password_data)) {
-                    $this->Flash->success('Successfully changed password!');
+
+                    $this->Session->setFlash('Successfully changed password!', 'default', array('class' => 'form-text text-success'));
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {
-                    $this->Flash->error('Failed to change password!');
+                    $this->Session->setFlash('Failed to change password!', 'default', array('class' => 'form-text text-danger'));
+
                     $this->redirect(array('action' => 'edit_password'));
                 }
             } else {
-                $this->Flash->error('Your passwords did not match.');
+                $this->Session->setFlash('Your passwords did not match!', 'default', array('class' => 'form-text text-danger'));
                 $this->redirect(array('action' => 'edit_password'));
             }
         }
