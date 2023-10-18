@@ -21,6 +21,7 @@ class MessagesController extends AppController
             'conditions' => array('User.id' => $user_check['id'])
         ));
 
+        $limit = array_key_exists('n', $this->request->query) ? (int) $this->request->query['n'] : 10;
 
         $this->Paginator->settings = array(
             'conditions' => array(
@@ -55,7 +56,7 @@ class MessagesController extends AppController
                     // 'User'
                 )
             ),
-            'limit' => 10
+            'limit' => $limit
 
         );
         $conversations = $this->Paginator->paginate('Conversation');
@@ -93,6 +94,7 @@ class MessagesController extends AppController
         // $this->set('conversations', $conversations);
         $this->set(compact('conversations'));
         $this->set('user', $user_details['User']);
+        $this->set('next_limit', $limit + 10);
     }
 
     public function view($id = null)
@@ -105,15 +107,18 @@ class MessagesController extends AppController
             'conditions' => array('User.id' => $user_check['id'])
         ));
 
+        $limit = array_key_exists('n', $this->request->query) ? (int) $this->request->query['n'] : 10;
+
         $this->Paginator->settings = array(
             'conditions' => array('Message.conversation_id' => $id),
             'order' => 'Message.time_sent DESC',
-            'limit' => 10
+            'limit' => $limit
         );
         $messages = $this->Paginator->paginate('Message');
 
         $this->set('user', $user_details['User']);
         $this->set(compact('messages'));
+        $this->set('next_limit', $limit + 10);
 
         // var_dump($messages);
     }
