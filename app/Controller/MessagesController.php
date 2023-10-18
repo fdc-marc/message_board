@@ -91,6 +91,10 @@ class MessagesController extends AppController
                 );
                 $conversation['User'] = $user;
             }
+
+            // update time sent format
+            $timeSent = new DateTime($conversation['Message'][0]['time_sent']);
+            $conversation['Message'][0]['time_sent'] = $timeSent->format('Y/m/d H:i');
         }
 
         // var_dump($messages);

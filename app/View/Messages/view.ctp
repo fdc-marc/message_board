@@ -6,6 +6,17 @@ $sender_id = $messages[0]['Conversation']['user1'] == $user['id'] ? $messages[0]
 $receiver_id = $messages[0]['Conversation']['user1'] == $sender_id ? $messages[0]['Conversation']['user2'] : $messages[0]['Conversation']['user1'];
 
 $msg_image = $user['photo'] ? $this->webroot . 'img/profile-photos/' . $user['photo'] : $this->webroot . 'img/empty-image.jpeg';
+
+function formatTimeSent($time)
+{
+    // Create a DateTime object from the original string
+    $dateTime = new DateTime($time);
+
+    // Format the DateTime object as needed
+    $formattedDateTime = $dateTime->format('Y/m/d H:i');
+
+    return $formattedDateTime;
+}
 ?>
 
 <div class="container py-3">
@@ -77,7 +88,7 @@ $msg_image = $user['photo'] ? $this->webroot . 'img/profile-photos/' . $user['ph
                                     <button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="<?php echo $message['Message']['id'] ?>">Delete</button>
                                 </div>
                                 <div class=" col-6 d-flex justify-content-end align-items-center">
-                                    <?php echo $message['Message']['time_sent'] ?>
+                                    <?php echo formatTimeSent($message['Message']['time_sent']) ?>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +118,7 @@ $msg_image = $user['photo'] ? $this->webroot . 'img/profile-photos/' . $user['ph
                                         <button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="<?php echo $message['Message']['id'] ?>">Delete</button>
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
-                                        <?php echo $message['Message']['time_sent'] ?>
+                                        <?php echo formatTimeSent($message['Message']['time_sent']) ?>
                                     </div>
                                 </div>
                             </div>

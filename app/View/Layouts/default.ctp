@@ -82,7 +82,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<?php
 					if ($this->Session->check('Auth.User')) :
 						// echo $current_user['name'] ?? $current_user['User']['name'];
-						$user_icon = '<i class="fa-regular fa-user"></i>';
+						$user_icon = '<i class="fa-regular fa-user px-1"></i>';
 						echo $this->Html->link($current_user['name'] ?? $user_icon . $current_user['User']['name'], array('controller' => 'Users', 'action' => 'profile'), ['class' => 'text-decoration-none px-3', 'escape' => false]);
 						echo $this->Html->link('Logout', array('controller' => 'Users', 'action' => 'logout'), ['class' => 'px-3']);
 					else :

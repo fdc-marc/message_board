@@ -1,8 +1,10 @@
 $(document).ready(function () {
 	//birthdate datepicker
-	$("#birthdate").datepicker();
+
 	$("#birthdate").datepicker({
-		format: "yyyy-mm-dd", // Set the desired date format
+		format: "yyyy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
 	});
 
 	// preview uploaded profile photo

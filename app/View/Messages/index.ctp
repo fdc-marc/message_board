@@ -28,6 +28,16 @@
 
     <div class="conversation-section">
         <?php
+        if (count($conversations) == 0) {
+            echo
+            '<div class="row pt-5">
+            <div class="col d-flex justify-content-center align-items-center">
+            <p class="message-text mb-0">
+            No conversations found yet...
+
+            </p></div>
+            </div>';
+        }
         foreach ($conversations as $conversation) :
             $latest_message = $conversation['Message'][0];
             $user_image = $conversation['User']['photo'];
@@ -35,6 +45,8 @@
             // var_dump($conversation);
 
             $convo_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
+
+
             if ($latest_message['user_id'] != $user['id']) :
         ?>
 

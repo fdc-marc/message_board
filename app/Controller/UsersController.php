@@ -143,7 +143,10 @@ class UsersController extends AppController
 
         // format datetime values
         $joinedDateTime = new DateTime($user_details['User']['joined_date']);
+        $lastLoginTime = new DateTime($user_details['User']['last_login_date']);
+
         $user_details['User']['joined_date'] = $joinedDateTime->format("F d, Y gA");
+        $user_details['User']['last_login_date'] = $lastLoginTime->format("F d, Y gA");
 
         if (isset($user['User']['last_login_date'])) {
             $lastLoginDateTime = new DateTime($user['User']['last_login_date']);
@@ -242,7 +245,6 @@ class UsersController extends AppController
                 $edit_data = $this->request->data;
 
                 if ($this->User->save($edit_data)) {
-                    $this->Flash->success('Successfully updated email!');
                     $this->Session->setFlash('Successfully updated email!', 'default', array('class' => 'form-text text-success'));
                     $this->redirect(array('controller' => 'Users', 'action' => 'profile'));
                 } else {
