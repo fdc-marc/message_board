@@ -49,8 +49,10 @@
                         <div class="col-11">
                             <div class="row convo-content p-3">
                                 <div class="col-12 d-flex align-items-center">
-                                    <p class="text-truncate mb-0">
-                                        <?php echo $latest_message['content'] ?></p>
+                                    <p class="message-text mb-0">
+                                        <?php echo $latest_message['content'] ?>
+                                    </p>
+
                                 </div>
 
                             </div>
@@ -77,9 +79,11 @@
                         <div class="col-11">
                             <div class="row convo-content p-3">
                                 <div class="col-12 d-flex align-items-center">
-                                    <p class="text-truncate mb-0">
+
+                                    <p class="message-text mb-0">
                                         <?php echo $latest_message['content'] ?>
                                     </p>
+
 
                                 </div>
 

@@ -2,6 +2,10 @@ const BASE_IMG_URL = window.location.origin + "/message_board/img";
 
 // add new message
 $(document).ready(function () {
+	// message content truncate/ellipsis
+
+	applyTruncate();
+
 	const add_recipient = $("#add-recipient");
 
 	// select2 add recipient dropdown
@@ -92,7 +96,7 @@ $(document).ready(function () {
 							<div class="col-11">
 								<div class="row convo-content p-3">
 									<div class="col-12 d-flex align-items-center">
-										<p class="text-truncate mb-0">${message.content}</p>
+										<p class="message-text mb-0">${message.content}</p>
 									</div>
 								</div>
 								<div class="row convo-footer px-3">
@@ -114,6 +118,8 @@ $(document).ready(function () {
 
 					$(".messages-section").prepend(msgContainer);
 				}
+
+				applyTruncate();
 			},
 		});
 	});
@@ -168,7 +174,7 @@ $(document).ready(function () {
 									<div class="col-11">
 										<div class="row convo-content p-3">
 											<div class="col-12 d-flex align-items-center">
-												<p class="text-truncate mb-0">${message.content}</p>
+												<p class="message-text mb-0">${message.content}</p>
 											</div>
 										</div>
 										<div class="row convo-footer px-3">
@@ -199,7 +205,7 @@ $(document).ready(function () {
 									<div class="col-11">
 										<div class="row convo-content p-3">
 											<div class="col-12 d-flex align-items-center">
-												<p class="text-truncate mb-0">${message.content}</p>
+												<p class="message-text mb-0">${message.content}</p>
 											</div>
 										</div>
 										<div class="row convo-footer px-3">
@@ -221,6 +227,7 @@ $(document).ready(function () {
 							$(".conversation-section").append(receiverContainer);
 						}
 					});
+					applyTruncate();
 				},
 			});
 		}, 1000);
@@ -269,7 +276,7 @@ $(document).ready(function () {
 										<div class="col-11">
 											<div class="row convo-content p-3">
 												<div class="col-12 d-flex align-items-center">
-													<p class="text-truncate mb-0">${msg.content}</p>
+													<p class="message-text mb-0">${msg.content}</p>
 												</div>
 											</div>
 											<div class="row convo-footer px-3">
@@ -300,7 +307,7 @@ $(document).ready(function () {
 										<div class="col-11">
 											<div class="row convo-content p-3">
 												<div class="col-12 d-flex align-items-center">
-													<p class="text-truncate mb-0">${msg.content}</p>
+													<p class="message-textmb-0">${msg.content}</p>
 												</div>
 											</div>
 											<div class="row convo-footer px-3">
@@ -321,6 +328,7 @@ $(document).ready(function () {
 							$(".messages-section").append(receiverContainer);
 						}
 					});
+					applyTruncate();
 				},
 			});
 		}, 1000);
@@ -345,4 +353,34 @@ function formatUsers(user) {
 	}
 
 	return user_select;
+}
+
+// for message text truncate
+function applyTruncate() {
+	let maxLength = 200;
+	$(".message-text").each(function () {
+		let messageText = $(this);
+		let fullText = messageText.text();
+
+		if (fullText.length > maxLength) {
+			let truncatedText = fullText.substring(0, maxLength) + "...";
+
+			messageText.text(truncatedText);
+			messageText.addClass("truncated");
+
+			messageText.click(function () {
+				if (messageText.hasClass("truncated")) {
+					messageText.text(fullText);
+					messageText.css("text-decoration", "");
+				} else {
+					messageText.text(truncatedText);
+					messageText.css("text-decoration", "underline");
+				}
+				messageText.toggleClass("truncated");
+			});
+
+			messageText.css("cursor", "pointer");
+			messageText.css("text-decoration", "underline");
+		}
+	});
 }

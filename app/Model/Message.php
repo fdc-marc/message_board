@@ -39,7 +39,7 @@ class Message extends Model
 
     public $validate = array(
         'content' => array(
-            'rule' => 'alphaNumeric',
+            'rule' => 'notBlank',
             'required' => true
         )
     );
