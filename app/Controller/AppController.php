@@ -77,7 +77,8 @@ class AppController extends Controller
         $this->Auth->allow(
             'login',
             'register',
-            // 'logout',
+            'logout',
+            'thank_you',
         );
 
         // $this->set('logged_in', $this->Auth->loggedIn());

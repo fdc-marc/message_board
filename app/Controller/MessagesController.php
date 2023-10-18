@@ -21,53 +21,46 @@ class MessagesController extends AppController
             'conditions' => array('User.id' => $user_check['id'])
         ));
 
-        // $data = $this->request->data;
 
-        // $conversations = $this->Conversation->find('all', array(
-        //     'conditions' => array(
-        //         'OR' => array(
-        //             array(
-        //                 'Conversation.user1' => $user_check['id']
-        //             ),
-        //             array(
-        //                 'Conversation.user2' => $user_check['id']
-        //             )
-        //         )
-        //     ),
-        //     'order' => 'Conversation.latest_message_time DESC',
-        //     'contain' => array(
-        //         'Message' => array(
-        //             'order' => array('Message.time_sent DESC'),
-        //             'limit' => 1,
-        //             'User'
-        //         )
-        //     )
-        // ));
-
-        // $this->Paginator->settings = $this->paginate;
         $this->Paginator->settings = array(
             'conditions' => array(
                 'OR' => array(
                     array(
-                        'Conversation.user1' => $user_check['id']
+                        'Conversation.user1' => $user_details['User']['id']
                     ),
                     array(
-                        'Conversation.user2' => $user_check['id']
+                        'Conversation.user2' => $user_details['User']['id']
+                    )
+                ),
+                // 'Message.content LIKE' => '%' . $term . '%'
+            ),
+            'order' => 'Conversation.latest_message_time DESC',
+
+            'joins' => array(
+                array(
+                    'table' => 'messages',
+                    'alias' => 'Message',
+                    'type' => 'LEFT',
+                    'conditions' => array(
+                        'Message.conversation_id = Conversation.id'
                     )
                 )
             ),
-            'order' => 'Conversation.latest_message_time DESC',
+            'group' => 'Conversation.id',
+
             'contain' => array(
                 'Message' => array(
                     'order' => array('Message.time_sent DESC'),
                     'limit' => 1,
-                    'User'
+                    // 'User'
                 )
             ),
             'limit' => 10
 
         );
         $conversations = $this->Paginator->paginate('Conversation');
+
+        // var_dump($conversations);
 
         // get user from latest message of the convo
         foreach ($conversations as &$conversation) {
@@ -95,7 +88,7 @@ class MessagesController extends AppController
             }
         }
 
-        // var_dump($conversations);
+        // var_dump($messages);
 
         // $this->set('conversations', $conversations);
         $this->set(compact('conversations'));
@@ -104,13 +97,13 @@ class MessagesController extends AppController
 
     public function view($id = null)
     {
-        // get all messages by conversation_id
-        // $messages = $this->Message->find('all', array(
-        //     'conditions' => array('Message.conversation_id' => $id),
-        //     'order' => 'Message.time_sent DESC',
-        // ));
+        $this->loadModel('User');
         $current_user = $this->Session->read('Auth.User');
         $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+        $user_details = $this->User->find('first', array(
+            'conditions' => array('User.id' => $user_check['id'])
+        ));
 
         $this->Paginator->settings = array(
             'conditions' => array('Message.conversation_id' => $id),
@@ -119,10 +112,108 @@ class MessagesController extends AppController
         );
         $messages = $this->Paginator->paginate('Message');
 
-        $this->set('user_check', $user_check);
+        $this->set('user', $user_details['User']);
         $this->set(compact('messages'));
 
         // var_dump($messages);
+    }
+
+    public function search_conversation()
+    {
+        if ($this->request->is('post')) {
+
+            $this->loadModel('Conversation');
+            $this->loadModel('User');
+
+            $current_user = $this->Session->read('Auth.User');
+            $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+            $user_details = $this->User->find('first', array(
+                'conditions' => array('User.id' => $user_check['id'])
+            ));
+
+            $searchTerm = $this->request->data['query'];
+
+            $this->Paginator->settings = array(
+                'conditions' => array(
+                    'OR' => array(
+                        array(
+                            'Conversation.user1' => $user_details['User']['id']
+                        ),
+                        array(
+                            'Conversation.user2' => $user_details['User']['id']
+                        )
+                    ),
+                    'Message.content LIKE' => '%' . $searchTerm . '%'
+                ),
+                'order' => 'Conversation.latest_message_time DESC',
+                'group' => 'Conversation.id',
+                'joins' => array(
+                    array(
+                        'table' => 'messages',
+                        'alias' => 'Message',
+                        'type' => 'LEFT',
+                        'conditions' => array(
+                            'Message.conversation_id = Conversation.id'
+                        )
+                    )
+                ),
+                'limit' => 10
+
+            );
+
+            $conversations = $this->Paginator->paginate('Conversation');
+
+            // get user information
+            foreach ($conversations as &$conversation) {
+                $latest_message_user = $this->User->find('first', array(
+                    'conditions' => array(
+                        'User.id' => $conversation['Message'][0]['user_id']
+                    ),
+                    'fields' => array(
+                        'User.id',
+                        'User.name',
+                        'User.email',
+                        'User.photo',
+                    )
+
+                ));
+
+                if ($latest_message_user) {
+                    $user = array(
+                        'id' => $latest_message_user['User']['id'],
+                        'name' => $latest_message_user['User']['name'],
+                        'email' => $latest_message_user['User']['email'],
+                        'photo' => $latest_message_user['User']['photo']
+                    );
+                    $conversation['Message'][0]['user'] = $user;
+                }
+            }
+
+            $this->autoRender = false;
+            echo json_encode($conversations);
+        }
+    }
+
+    public function search_message()
+    {
+        if ($this->request->is('post')) {
+            $current_user = $this->Session->read('Auth.User');
+            $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
+            $searchTerm = $this->request->data['query'];
+            $id = $this->request->data['convo_id'];
+
+            $this->Paginator->settings = array(
+                'conditions' => array('Message.conversation_id' => $id, 'Message.content LIKE' => '%' . $searchTerm . '%'),
+                'order' => 'Message.time_sent DESC',
+                'limit' => 10
+            );
+            $messages = $this->Paginator->paginate('Message');
+
+            $this->autoRender = false;
+            echo json_encode($messages);
+        }
     }
 
     public function create()

@@ -1,3 +1,5 @@
+const BASE_IMG_URL = window.location.origin + "/message_board/img";
+
 // add new message
 $(document).ready(function () {
 	const add_recipient = $("#add-recipient");
@@ -132,13 +134,200 @@ $(document).ready(function () {
 			},
 		});
 	});
+
+	// search conversation
+	var search_timeout = null;
+	$("#searchConversation").on("keyup", function () {
+		const user_id = $("#index_user_id").val();
+		clearTimeout(search_timeout);
+
+		search_timeout = setTimeout(function () {
+			var query = $("#searchConversation").val();
+			$.ajax({
+				url: `${window.location.origin}/message_board/messages/search_conversation`,
+				type: "POST",
+				data: { query: query },
+				success: function (conversations) {
+					conversations = JSON.parse(conversations);
+					$(".conversation-section").empty();
+
+					$.each(conversations, (i, conversation) => {
+						const message = conversation.Message[0];
+						const msg_img = message.user.photo
+							? `${BASE_IMG_URL}/profile-photos/${message.user.photo}`
+							: `${BASE_IMG_URL}/empty-image.jpeg`;
+
+						if (message.user_id == user_id) {
+							const senderContainer = `
+							<div class="convo-container">
+								<div class="row">
+
+									<div class="col-11">
+										<div class="row convo-content p-3">
+											<div class="col-12 d-flex align-items-center">
+												<p class="text-truncate mb-0">${message.content}</p>
+											</div>
+										</div>
+										<div class="row convo-footer px-3">
+											<div class="col-12 d-flex justify-content-end">
+												<div class="col-6 d-flex justify-content-start align-items-center">
+												<button class="btn btn-info btn-sm filterViewBtn" data-convo-id="${conversation.Conversation.id}">View</button>
+													<button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="${message.id}">Delete</button>
+												</div>
+												<div class="col-6 d-flex justify-content-end align-items-center">
+													${message.time_sent}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-1 px-0">
+									<img class="convo-img" src="${msg_img}">
+								</div>
+								</div>
+							</div>`;
+							$(".conversation-section").append(senderContainer);
+						} else {
+							const receiverContainer = `
+							<div class="convo-container">
+								<div class="row">
+								<div class="col-1 px-0">
+								<img class="convo-img" src="${msg_img}">
+								</div>
+									<div class="col-11">
+										<div class="row convo-content p-3">
+											<div class="col-12 d-flex align-items-center">
+												<p class="text-truncate mb-0">${message.content}</p>
+											</div>
+										</div>
+										<div class="row convo-footer px-3">
+											<div class="col-12 d-flex justify-content-end">
+												<div class="col-6 d-flex justify-content-start align-items-center">
+												<button class="btn btn-info btn-sm filterViewBtn" data-convo-id="${conversation.Conversation.id}">View</button>
+													<button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="${message.id}">Delete</button>
+												</div>
+												<div class="col-6 d-flex justify-content-end align-items-center">
+													${message.time_sent}
+												</div>
+											</div>
+										</div>
+									</div>
+
+								
+								</div>
+							</div>`;
+							$(".conversation-section").append(receiverContainer);
+						}
+					});
+				},
+			});
+		}, 1000);
+	});
+
+	// filtered conversations view button
+	$(".conversation-section").on("click", ".filterViewBtn", function () {
+		const convo_id = $(this).data("convo-id");
+
+		window.location.assign(
+			`${window.location.origin}/message_board/messages/view/${convo_id}`
+		);
+	});
+
+	// search message
+	$("#searchMessage").on("keyup", function () {
+		const convo_id = $(this).data("convo-id");
+		const user_id = $("#view_user_id").val();
+		clearTimeout(search_timeout);
+
+		search_timeout = setTimeout(function () {
+			var query = $("#searchMessage").val();
+			$.ajax({
+				url: `${window.location.origin}/message_board/messages/search_message`,
+				type: "POST",
+				data: { query: query, convo_id: convo_id },
+				success: function (messages) {
+					messages = JSON.parse(messages);
+
+					$(".messages-section").empty();
+
+					$.each(messages, (i, message) => {
+						const msg = message.Message;
+						const user = message.User;
+						const msg_img = user.photo
+							? `${BASE_IMG_URL}/profile-photos/${user.photo}`
+							: `${BASE_IMG_URL}/empty-image.jpeg`;
+
+						console.log(msg);
+						console.log(user_id);
+						if (msg.user_id == user_id) {
+							const senderContainer = `
+								<div class="convo-container">
+									<div class="row">
+	
+										<div class="col-11">
+											<div class="row convo-content p-3">
+												<div class="col-12 d-flex align-items-center">
+													<p class="text-truncate mb-0">${msg.content}</p>
+												</div>
+											</div>
+											<div class="row convo-footer px-3">
+												<div class="col-12 d-flex justify-content-end">
+													<div class="col-6 d-flex justify-content-start align-items-center">
+													
+														<button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="${msg.id}">Delete</button>
+													</div>
+													<div class="col-6 d-flex justify-content-end align-items-center">
+														${msg.time_sent}
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-1 px-0">
+										<img class="convo-img" src="${msg_img}">
+									</div>
+									</div>
+								</div>`;
+							$(".messages-section").append(senderContainer);
+						} else {
+							const receiverContainer = `
+								<div class="convo-container">
+									<div class="row">
+									<div class="col-1 px-0">
+									<img class="convo-img" src="${msg_img}">
+									</div>
+										<div class="col-11">
+											<div class="row convo-content p-3">
+												<div class="col-12 d-flex align-items-center">
+													<p class="text-truncate mb-0">${msg.content}</p>
+												</div>
+											</div>
+											<div class="row convo-footer px-3">
+												<div class="col-12 d-flex justify-content-end">
+													<div class="col-6 d-flex justify-content-start align-items-center">
+														<button class="btn btn-danger btn-sm deleteMessageBtn" data-message-id="${msg.id}">Delete</button>
+													</div>
+													<div class="col-6 d-flex justify-content-end align-items-center">
+														${msg.time_sent}
+													</div>
+												</div>
+											</div>
+										</div>
+	
+									
+									</div>
+								</div>`;
+							$(".messages-section").append(receiverContainer);
+						}
+					});
+				},
+			});
+		}, 1000);
+	});
 });
 
 // helper functions
 
 function formatUsers(user) {
-	const base_url = `${window.location.origin}/message_board/img`;
-	const default_image = `${base_url}/empty-image.jpeg`;
+	const default_image = `${BASE_IMG_URL}/empty-image.jpeg`;
 
 	var user_select;
 
@@ -148,7 +337,7 @@ function formatUsers(user) {
 		);
 	} else {
 		user_select = $(
-			`<span><img src="${base_url}/profile-photos/${user.photo}" class="dropdown-img /> ${user.text}</span>`
+			`<span><img src="${BASE_IMG_URL}/profile-photos/${user.photo}" class="dropdown-img /> ${user.text}</span>`
 		);
 	}
 

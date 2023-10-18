@@ -4,16 +4,7 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends Controller
 {
-    public function beforeFilter()
-    {
-        parent::beforeFilter();
 
-        // Check the session condition
-        if ($this->Session->read('logged_in') == true) {
-            // Disable the specific action(s)
-            // $this->Auth->allow('profile', 'edit', 'thank_you', 'edit_profile', 'edit_password', 'edit_password_request', 'edit_email', 'edit_email_request');
-        }
-    }
 
     public function get_users()
     {

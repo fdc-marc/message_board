@@ -2,10 +2,10 @@
 $paginator = $this->Paginator;
 
 
-$sender_id = $messages[0]['Conversation']['user1'] == $user_check['id'] ? $messages[0]['Conversation']['user1'] : $messages[0]['Conversation']['user2'];
+$sender_id = $messages[0]['Conversation']['user1'] == $user['id'] ? $messages[0]['Conversation']['user1'] : $messages[0]['Conversation']['user2'];
 $receiver_id = $messages[0]['Conversation']['user1'] == $sender_id ? $messages[0]['Conversation']['user2'] : $messages[0]['Conversation']['user1'];
 
-$msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $user_check['photo'] : $this->webroot . 'img/empty-image.jpeg';
+$msg_image = $user['photo'] ? $this->webroot . 'img/profile-photos/' . $user['photo'] : $this->webroot . 'img/empty-image.jpeg';
 ?>
 
 <div class="container py-3">
@@ -32,10 +32,18 @@ $msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $us
     </div>
 
     <div class="row pb-3">
-        <div class="col-12 d-flex justify-content-end">
+        <div class="col-6">
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <label for="">Search: </label>
+                <input id="searchMessage" type="text" class="form-control" data-convo-id="<?php echo $messages[0]['Conversation']['id'] ?> ">
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
             <button class="btn btn-success replyMessageBtn" data-convo-id="<?php echo $messages[0]['Conversation']['id'] ?> " data-user-id="<?php echo $sender_id ?>" data-receiver-id="<?php echo $receiver_id ?>" data-msg-img="<?php echo $msg_image ?>">Reply Message</button>
         </div>
     </div>
+
+    <input type="hidden" id="view_user_id" value="<?php echo $user['id'] ?>">
 
     <div class="messages-section">
         <?php
@@ -46,7 +54,7 @@ $msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $us
 
             $msg_image = $user_image ? $this->webroot . 'img/profile-photos/' . $user_image : $this->webroot . 'img/empty-image.jpeg';
 
-            if ($message['Message']['user_id'] != $user_check['id']) :
+            if ($message['Message']['user_id'] != $user['id']) :
         ?>
                 <!-- if last message sent was from other person -->
                 <div class="convo-container">
