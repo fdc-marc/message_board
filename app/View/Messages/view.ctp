@@ -1,7 +1,6 @@
 <?php
 $paginator = $this->Paginator;
-$current_user = $this->Session->read('Auth.User');
-$user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
+
 
 $sender_id = $messages[0]['Conversation']['user1'] == $user_check['id'] ? $messages[0]['Conversation']['user1'] : $messages[0]['Conversation']['user2'];
 $receiver_id = $messages[0]['Conversation']['user1'] == $sender_id ? $messages[0]['Conversation']['user2'] : $messages[0]['Conversation']['user1'];
@@ -27,7 +26,7 @@ $msg_image = $user_check['photo'] ? $this->webroot . 'img/profile-photos/' . $us
     <div class="row py-3">
         <div class="col-6"></div>
         <div class="col-6">
-            <textarea name="replyMessage" id="replyMessage" rows="4" style="width: 100%;"></textarea>
+            <textarea name="replyMessage" id="replyMessage" rows="4" class="form-control"></textarea>
         </div>
 
     </div>

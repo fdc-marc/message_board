@@ -41,7 +41,6 @@ $(document).ready(function () {
 		const conversation_id = $(this).data("convo-id");
 		const convo_container = $(this).closest(".convo-container");
 
-		console.log(conversation_id);
 		if (!confirm("Are you sure you want to delete conversation?")) return;
 
 		$.ajax({
@@ -68,7 +67,7 @@ $(document).ready(function () {
 			content: $("#replyMessage").val(),
 		};
 
-		if (!content) {
+		if (!reply_data.content) {
 			alert("Please enter a message");
 			return;
 		}

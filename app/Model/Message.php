@@ -36,4 +36,11 @@ class Message extends Model
         'className' => 'User',
         'foreignKey' => 'user_id'
     ), 'Conversation');
+
+    public $validate = array(
+        'content' => array(
+            'rule' => 'alphaNumeric',
+            'required' => true
+        )
+    );
 }

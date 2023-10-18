@@ -7,10 +7,21 @@
     ?>
 
 
-    <h1>Message List</h1>
+    <div class="row">
+        <div class="col-6">
+            <h1>Message List</h1>
+        </div>
+
+
+    </div>
+
 
     <div class="row pb-3">
-        <div class="col-12 d-flex justify-content-end">
+        <div class="col-6 d-flex justify-content-center align-items-center">
+            <label for="">Search:</label>
+            <input id="searchConversation" type="text" class="form-control">
+        </div>
+        <div class="col-6 d-flex justify-content-end">
             <?php echo $this->Html->link('New Message', array('controller' => 'messages', 'action' => 'create'), ['class' => 'btn btn-success px-3 py-2']); ?>
         </div>
     </div>

@@ -5,7 +5,15 @@
     ?>
 
 
-    <h1>Create New Message</h1>
+    <div class="row">
+        <div class="col-6">
+            <h1>Create New Message</h1>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-center">
+            <?php echo $this->Html->link('Back to Message List', array('controller' => 'messages', 'action' => 'index'), ['class' => 'btn btn-dark']); ?>
+        </div>
+    </div>
+
 
     <form action="/message_board/messages/create_message" method="post">
         <div class="row">

@@ -109,6 +109,8 @@ class MessagesController extends AppController
         //     'conditions' => array('Message.conversation_id' => $id),
         //     'order' => 'Message.time_sent DESC',
         // ));
+        $current_user = $this->Session->read('Auth.User');
+        $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
         $this->Paginator->settings = array(
             'conditions' => array('Message.conversation_id' => $id),
@@ -117,7 +119,7 @@ class MessagesController extends AppController
         );
         $messages = $this->Paginator->paginate('Message');
 
-        // $this->set('messages', $messages);
+        $this->set('user_check', $user_check);
         $this->set(compact('messages'));
 
         // var_dump($messages);
@@ -177,9 +179,15 @@ class MessagesController extends AppController
                 );
 
                 if ($this->Conversation->save($conversation_update)) {
-                    if ($this->Message->save($message_data)) {
-                        $this->Session->setFlash('Successfully sent message!');
-                        $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                    $this->Message->set($message_data);
+                    if ($this->Message->validates()) {
+                        if ($this->Message->save($message_data)) {
+                            $this->Session->setFlash('Successfully sent message!');
+                            $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                        } else {
+                            $this->Session->setFlash('Failed to send message!');
+                            $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
+                        }
                     } else {
                         $this->Session->setFlash('Failed to send message!');
                         $this->redirect(array('controller' => 'Messages', 'action' => 'index'));
@@ -195,15 +203,17 @@ class MessagesController extends AppController
 
                 if ($this->Conversation->save($conversation)) {
                     // insert message
-
                     $message_data['conversation_id'] = $this->Conversation->getInsertID();
 
-                    if ($this->Message->save($message_data)) {
-                        $this->Session->setFlash('Successfully sent message!');
-                        $this->redirect(array('action' => 'index'));
-                    } else {
-                        $this->Session->setFlash('Error sending message!');
-                        $this->redirect(array('action' => 'create'));
+                    $this->Message->set($message_data);
+                    if ($this->Message->validates()) {
+                        if ($this->Message->save($message_data)) {
+                            $this->Session->setFlash('Successfully sent message!');
+                            $this->redirect(array('action' => 'index'));
+                        } else {
+                            $this->Session->setFlash('Error sending message!');
+                            $this->redirect(array('action' => 'create'));
+                        }
                     }
                 } else {
                     $this->Session->setFlash('Error sending message!');
