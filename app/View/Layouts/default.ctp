@@ -65,7 +65,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div> -->
 		<nav class="navbar bg-body-tertiary py-3">
 			<div class="container">
-				<a class="navbar-brand" href="#">MessageBoard</a>
+				<?php
+				if ($this->Session->check('Auth.User')) {
+					$current_user = $this->Session->read('Auth.User');
+					echo $this->Html->link('MessageBoard', array('controller' => 'users', 'action' => 'profile'), ['class' => 'navbar-brand text-decoration-none px-3']);
+				} else {
+					echo $this->Html->link('MessageBoard', array('controller' => 'users', 'action' => 'login'), ['class' => 'navbar-brand text-decoration-none px-3']);
+				}
+				?>
 				<div class="d-flex">
 					<!-- <a class="nav-link px-3" href="#">Home</span></a> -->
 
@@ -74,7 +81,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 					<?php
 					if ($this->Session->check('Auth.User')) :
-						$current_user = $this->Session->read('Auth.User');
 						// echo $current_user['name'] ?? $current_user['User']['name'];
 						$user_icon = '<i class="fa-regular fa-user"></i>';
 						echo $this->Html->link($current_user['name'] ?? $user_icon . $current_user['User']['name'], array('controller' => 'Users', 'action' => 'profile'), ['class' => 'text-decoration-none px-3', 'escape' => false]);
@@ -97,14 +103,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div>
 		<div id="footer" class="mt-5 py-3 bg-light">
 			<div class="container">
-				<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'https://cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-				?>
+
 				<p>
-					<?php echo $cakeVersion; ?>
+					FDCI - MessageBoard - <?php echo $cakeVersion; ?>
 				</p>
 			</div>
 

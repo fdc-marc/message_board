@@ -9,34 +9,37 @@ $(document).ready(function () {
 		placeholder: "Search for a recipient",
 	});
 
-	$.ajax({
-		url: `${window.location.origin}/message_board/users/get_users`, // users/get_users
-		method: "get",
-		dataType: "json",
-		success: function (users) {
-			let users_array = [];
+	const create_url = "http://localhost/message_board/messages/create";
+	if (window.location.href === create_url) {
+		$.ajax({
+			url: `${window.location.origin}/message_board/users/get_users`,
+			method: "get",
+			dataType: "json",
+			success: function (users) {
+				let users_array = [];
 
-			$.each(users, (i, user) => {
-				user = user.User;
+				$.each(users, (i, user) => {
+					user = user.User;
 
-				let user_option = {
-					id: user.id,
-					text: user.name,
-					photo: user.photo,
-				};
+					let user_option = {
+						id: user.id,
+						text: user.name,
+						photo: user.photo,
+					};
 
-				users_array.push(user_option);
+					users_array.push(user_option);
 
-				// add_recipient.append(user_option).trigger("change");
-			});
+					// add_recipient.append(user_option).trigger("change");
+				});
 
-			add_recipient.select2({ data: users_array });
-		},
-	});
+				add_recipient.select2({ data: users_array });
+			},
+		});
 
-	add_recipient.select2({
-		templateResult: formatUsers,
-	});
+		add_recipient.select2({
+			templateResult: formatUsers,
+		});
+	}
 
 	// delete conversation
 	$(".deleteConvoBtn").on("click", function () {

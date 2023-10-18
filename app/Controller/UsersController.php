@@ -2,9 +2,16 @@
 date_default_timezone_set('Asia/Singapore');
 App::uses('AppController', 'Controller');
 
-class UsersController extends Controller
+class UsersController extends AppController
 {
+    public function beforeFilter()
+    {
+        $this->Auth->allow(array('login', 'login_request', 'register', 'register_request'));
 
+        $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'profile');
+        $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+        $this->loadModel('User');
+    }
 
     public function get_users()
     {

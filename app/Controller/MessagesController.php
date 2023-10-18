@@ -5,13 +5,17 @@ App::uses('AppController', 'Controller');
 
 class MessagesController extends AppController
 {
+    public function beforeFilter()
+    {
+        $this->loadModel('User');
+        $this->loadModel('Conversation');
+    }
+
     public $components = array('Paginator');
+
 
     public function index()
     {
-
-        $this->loadModel('Conversation');
-        $this->loadModel('User');
 
 
         $current_user = $this->Session->read('Auth.User');
@@ -127,9 +131,6 @@ class MessagesController extends AppController
     {
         if ($this->request->is('post')) {
 
-            $this->loadModel('Conversation');
-            $this->loadModel('User');
-
             $current_user = $this->Session->read('Auth.User');
             $user_check = isset($current_user['User']) ? $current_user['User'] : $current_user;
 
@@ -229,7 +230,6 @@ class MessagesController extends AppController
     public function create_message()
     {
         if ($this->request->is('post')) {
-            $this->loadModel('Conversation');
 
             $message = $this->request->data;
 
@@ -322,7 +322,6 @@ class MessagesController extends AppController
     public function add_reply()
     {
         if ($this->request->is('post')) {
-            $this->loadModel('Conversation');
 
             $data = $this->request->data;
             $current_date_time =  date('Y-m-d H:i:s');
@@ -359,8 +358,6 @@ class MessagesController extends AppController
     public function delete_conversation()
     {
         if ($this->request->is('post')) {
-            $this->loadModel('Conversation');
-
             if ($this->Conversation->delete($this->request->data, true)) {
                 // cascade delete did not work, so manually delete all messages here
                 $messages = $this->Message->find('all', array(
